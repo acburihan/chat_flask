@@ -5,8 +5,8 @@ function onLoad () {
 }
 
 function newMessage() {
-    let msg = $('#inputMessage').val();
+    let msg = $('#inputMessage').val(); //get the String value of the message
     //add message to the database
     console.log(msg);
-    $('#inputMessage').val("");
+    $('#inputMessage').val(""); //Clear the input
 }
