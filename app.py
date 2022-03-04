@@ -1,7 +1,5 @@
 import flask
 from database.database import db, init_database
-from sqlalchemy.event import listen
-from database import models
 
 app = flask.Flask(__name__)
 
@@ -14,7 +12,7 @@ with app.test_request_context():
 
 
 @app.route('/')
-def load():
+def hello_world():
     return flask.render_template("index.html.jinja2")
 
 
