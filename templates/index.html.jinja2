@@ -4,7 +4,9 @@
       <meta charset="utf-8">
       <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
       <title>OurWhats</title>
-      <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+      <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+			  integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+			  crossorigin="anonymous"></script>
       <script src="{{ url_for("static", filename="message.js") }}"></script>
   </head>
   <body>
@@ -180,7 +182,7 @@
           {# <div class="w-100"></div> #}
 
           <div class="col-9">
-              <div class="row overflow-scroll" style="max-height: 90vh;">
+              <div id="Messages" class="row overflow-scroll" style="max-height: 90vh;">
                   <div class="float-end">
                       Hello. How are you today?
                       <span class="time-right">11:00</span>
@@ -490,9 +492,11 @@
               <div class="row" style="max-height: 10vh;">
                       <input id="inputMessage" class="me-2 col-8" type="search" placeholder="Nouveau message" aria-label="Search" autocomplete="off"/>
                       <button id="buttonMessage" class="btn btn-outline-success col-3" type="submit">Envoyer</button>
+                      <button id="buttonRefresh" class="btn btn-outline-success col-3" type="submit">Refresh</button>
               </div>
           </div>
       </div>
+
 {#          <div class="row">#}
 {#              <div class="col-3">#}
 {##}

@@ -7,22 +7,32 @@ class User(db.Model):
     password = db.Column(db.Text)
 
 
-class Message(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    user1 = db.Column(db.text, db.foreignKey('user.id'))
-    user2 = db.Column(db.text, db.foreignKey('user.id'))
-    msg = db.Column(db.text)
-    date = db.Column(db.DateTime)
-
-
 class Group(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.Text)
+    channel = db.Column(db.Integer, db.ForeignKey('channel.id'))
 
 
-junction_table = db.Table('UsersInGroups',
-                          db.Column('user_id', db.Integer, db.ForeignKey('user.id')),
-                          db.Column('group_id', db.Integer, db.ForeignKey('group.id')),
-                          db.Column('joinDate', db.Text)
-                          )
+group_junction_table = db.Table('UsersInGroups',
+                                db.Column('user_id', db.Integer, db.ForeignKey('user.id')),
+                                db.Column('group_id', db.Integer, db.ForeignKey('group.id')),
+                                db.Column('joinDate', db.Text)
+                                )
 
+
+class Channel(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+
+
+channel_junction_table = db.Table('UsersChannel',
+                                  db.Column('from_id', db.Integer, db.ForeignKey('user.id')),
+                                  db.Column('to_id', db.Integer, db.ForeignKey('user.id')),
+                                  db.Column('channel', db.Integer, db.ForeignKey('channel.id')),
+                                  )
+
+
+class Message(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    channel = db.Column(db.Integer)  # , db.ForeignKey('channel.id'))
+    msg = db.Column(db.Text)
+    date = db.Column(db.DateTime)
