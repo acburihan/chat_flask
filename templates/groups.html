@@ -30,30 +30,31 @@
          </div>
     </nav>
 
+    <div class="row col-1" style="max-height: 10vh;">
+        <p> </p>
+        <p> </p>
+        <p> </p>
+    </div>
+
+    <div class="row" style="max-height: 6vh;">
+        <div class="col-1" ></div>
+        <form id="createGroup" class="d-flex col-9" style="max-height: 6vh;">
+            <button class="btn btn-outline-success" style="max-height: 6vh;width: 50vh">Créer un nouveau groupe</button>
+            <input class="form-control me-2" placeholder="Nom du groupe" style="max-height: 6vh;"/>
+        </form>
+    </div>
+
+    <div class="row col-1" style="max-height: 10vh;">
+        <p> </p>
+        <p> </p>
+        <p> </p>
+    </div>
+
     <div class="row g-0" style="max-height: 90vh;max-width: 99.3vw">
           <div class="col-3">
             <div class="list-group">
               <ul id="list_groups" class="list-group" style="overflow-y:scroll;max-height: 94vh;">
-              <li class="list-group-item d-flex justify-content-between align-items-center">
-                Utilisateur 1
-                  <button class="suppr_group" >Supprimer</button>
-              </li>
-              <li class="list-group-item d-flex justify-content-between align-items-center">
-                Group 1
-                  <button class="suppr_group" >Supprimer</button>
-              </li>
-              <li class="list-group-item d-flex justify-content-between align-items-center">
-                Group 1
-                  <button class="suppr_group" >Supprimer</button>
-              </li>
-              <li class="list-group-item d-flex justify-content-between align-items-center">
-                Utilisateur 2
-                  <button class="suppr_group" >Supprimer</button>
-              </li><li class="list-group-item d-flex justify-content-between align-items-center">
-                Utilisateur 2
-                  <button class="suppr_group" >Supprimer</button>
-              </li>
-            </ul>
+              </ul>
             </div>
           </div>
 
@@ -62,15 +63,7 @@
           <div class="col-3">
             <div class="list-group">
               <ul id="list_users_in_group" class="list-group" style="overflow-y:scroll;max-height: 94vh;">
-              <li class="list-group-item d-flex justify-content-between align-items-center">
-                Utilisateur 1
-                  <button class="suppr_user" >Supprimer</button>
-              </li>
-              <li class="list-group-item d-flex justify-content-between align-items-center">
-                Utilisateur 2
-                  <button class="suppr_user" >Supprimer</button>
-              </li>
-            </ul>
+              </ul>
             </div>
           </div>
 
@@ -79,18 +72,6 @@
       <div class="col-3" id="myDropdown">
           <input class="form-control me-2" type="text" placeholder="Ajouter un utilisateur" id="SearchUser">
           <ul id="listUsers" style="overflow-y:scroll;max-height: 50vh;">
-              <li class="list-group-item justify-content-between align-items-center">
-                  User0
-                  <a href="#"><span class="badge bg-primary rounded-pill float-end">+</span></a>
-              </li>
-              <li class="list-group-item justify-content-between align-items-center">
-                  User1
-                  <a href="#"><span class="badge bg-primary rounded-pill float-end">+</span></a>
-              </li>
-              <li class="list-group-item justify-content-between align-items-center">
-                  User2
-                  <a href="#"><span class="badge bg-primary rounded-pill float-end">+</span></a>
-              </li>
           </ul>
       </div>
     </div>

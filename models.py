@@ -4,6 +4,7 @@ from database.database import db
 group_junction_table = db.Table('UsersInGroups',
                                 db.Column('user_id', db.Integer, db.ForeignKey('user.user_id')),
                                 db.Column('group_id', db.Integer, db.ForeignKey('group.group_id')),
+                                db.PrimaryKeyConstraint('user_id', 'group_id')
                                 )
 
 
@@ -11,7 +12,6 @@ class User(db.Model):
     user_id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.Text)
     password = db.Column(db.Text)
-    groups = db.relationship('Group', backref='user', cascade="all", secondary=group_junction_table)
 
 
 class Group(db.Model):

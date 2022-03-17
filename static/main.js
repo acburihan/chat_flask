@@ -15,7 +15,7 @@ function newMessage() {
     $.ajax({
       type: "POST",
       url: '/api/send_message',
-      data : {'group': 1, 'sender': 1, 'msg': typed_msg},
+      data : {'group': 1, 'msg': typed_msg},
     });
     $('#inputMessage').val(""); //Clear the input
 }
