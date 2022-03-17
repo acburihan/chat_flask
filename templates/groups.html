@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+      <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+      <title>Gestion de groupes</title>
+      <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+			  integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+			  crossorigin="anonymous"></script>
+      <script src="{{ url_for('static', filename='groups.js') }}"></script>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark" style="max-height: 6vh;">
+         <div class="container-fluid">
+          <a class="navbar-brand" href="/">User0</a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+
+          <div class="collapse navbar-collapse" id="navbarColor01">
+            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+              <li class="nav-item">
+                <a class="nav-link" aria-current="page" href="#">Paramètres</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="groups">Créer groupe</a>
+              </li>
+            </ul>
+          </div>
+         </div>
+    </nav>
+
+    <div class="row g-0" style="max-height: 90vh;max-width: 99.3vw">
+          <div class="col-3">
+            <div class="list-group">
+              <ul id="list_groups" class="list-group" style="overflow-y:scroll;max-height: 94vh;">
+              <li class="list-group-item d-flex justify-content-between align-items-center">
+                Utilisateur 1
+                  <button class="suppr_group" >Supprimer</button>
+              </li>
+              <li class="list-group-item d-flex justify-content-between align-items-center">
+                Group 1
+                  <button class="suppr_group" >Supprimer</button>
+              </li>
+              <li class="list-group-item d-flex justify-content-between align-items-center">
+                Group 1
+                  <button class="suppr_group" >Supprimer</button>
+              </li>
+              <li class="list-group-item d-flex justify-content-between align-items-center">
+                Utilisateur 2
+                  <button class="suppr_group" >Supprimer</button>
+              </li><li class="list-group-item d-flex justify-content-between align-items-center">
+                Utilisateur 2
+                  <button class="suppr_group" >Supprimer</button>
+              </li>
+            </ul>
+            </div>
+          </div>
+
+        <div class="col-1"></div>
+
+          <div class="col-3">
+            <div class="list-group">
+              <ul id="list_users_in_group" class="list-group" style="overflow-y:scroll;max-height: 94vh;">
+              <li class="list-group-item d-flex justify-content-between align-items-center">
+                Utilisateur 1
+                  <button class="suppr_user" >Supprimer</button>
+              </li>
+              <li class="list-group-item d-flex justify-content-between align-items-center">
+                Utilisateur 2
+                  <button class="suppr_user" >Supprimer</button>
+              </li>
+            </ul>
+            </div>
+          </div>
+
+        <div class="col-1"></div>
+
+      <div class="col-3" id="myDropdown">
+          <input class="form-control me-2" type="text" placeholder="Ajouter un utilisateur" id="SearchUser">
+          <ul id="listUsers" style="overflow-y:scroll;max-height: 50vh;">
+              <li class="list-group-item justify-content-between align-items-center">
+                  User0
+                  <a href="#"><span class="badge bg-primary rounded-pill float-end">+</span></a>
+              </li>
+              <li class="list-group-item justify-content-between align-items-center">
+                  User1
+                  <a href="#"><span class="badge bg-primary rounded-pill float-end">+</span></a>
+              </li>
+              <li class="list-group-item justify-content-between align-items-center">
+                  User2
+                  <a href="#"><span class="badge bg-primary rounded-pill float-end">+</span></a>
+              </li>
+          </ul>
+      </div>
+    </div>
+
+
+    <button id="buttonRefresh" class="row btn btn-outline-success col-3" type="submit">Refresh</button>
+</body>
+</html>

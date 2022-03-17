@@ -7,12 +7,12 @@
       <script src="https://code.jquery.com/jquery-3.6.0.min.js"
 			  integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
 			  crossorigin="anonymous"></script>
-      <script src="{{ url_for("static", filename="message.js") }}"></script>
+      <script src="{{ url_for('static', filename='main.js') }}"></script>
   </head>
   <body>
       <nav class="navbar navbar-expand-lg navbar-dark bg-dark" style="max-height: 6vh;">
          <div class="container-fluid">
-          <a class="navbar-brand" href="#">User0</a>
+          <a class="navbar-brand" href="/">User0</a>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
           </button>
@@ -23,7 +23,7 @@
                 <a class="nav-link" aria-current="page" href="#">Paramètres</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="#">Créer groupe</a>
+                <a class="nav-link" href="groups">Créer groupe</a>
               </li>
             </ul>
             <form class="d-flex">
@@ -42,7 +42,7 @@
 
           <div class="col-3">
             <div class="list-group">
-              <ul class="list-group overflow-scroll" style="max-height: 94vh;">
+              <ul class="list-group" style="overflow-y:scroll;max-height: 94vh;">
               <li class="list-group-item d-flex justify-content-between align-items-center">
                 Utilisateur 1
                 <span class="badge bg-primary rounded-pill">14</span>
@@ -60,120 +60,6 @@
                 <span class="badge bg-primary rounded-pill">1</span>
               </li><li class="list-group-item d-flex justify-content-between align-items-center">
                 Utilisateur 2
-              </li><li class="list-group-item d-flex justify-content-between align-items-center">
-                Utilisateur 2
-              </li><li class="list-group-item d-flex justify-content-between align-items-center">
-                Utilisateur 2
-              </li><li class="list-group-item d-flex justify-content-between align-items-center">
-                Utilisateur 2
-              </li><li class="list-group-item d-flex justify-content-between align-items-center">
-                Utilisateur 2
-              </li><li class="list-group-item d-flex justify-content-between align-items-center">
-                Utilisateur 2
-              </li><li class="list-group-item d-flex justify-content-between align-items-center">
-                Utilisateur 2
-              </li><li class="list-group-item d-flex justify-content-between align-items-center">
-                Utilisateur 2
-              </li><li class="list-group-item d-flex justify-content-between align-items-center">
-                Utilisateur 2
-              </li><li class="list-group-item d-flex justify-content-between align-items-center">
-                Utilisateur 2
-              </li><li class="list-group-item d-flex justify-content-between align-items-center">
-                Utilisateur 2
-              </li><li class="list-group-item d-flex justify-content-between align-items-center">
-                Utilisateur 2
-              </li><li class="list-group-item d-flex justify-content-between align-items-center">
-                Utilisateur 2
-              </li><li class="list-group-item d-flex justify-content-between align-items-center">
-                Utilisateur 2
-              </li><li class="list-group-item d-flex justify-content-between align-items-center">
-                Utilisateur 2
-              </li><li class="list-group-item d-flex justify-content-between align-items-center">
-                Utilisateur 2
-              </li><li class="list-group-item d-flex justify-content-between align-items-center">
-                Utilisateur 2
-              </li><li class="list-group-item d-flex justify-content-between align-items-center">
-                Utilisateur 2
-              </li><li class="list-group-item d-flex justify-content-between align-items-center">
-                Utilisateur 2
-              </li><li class="list-group-item d-flex justify-content-between align-items-center">
-                Utilisateur 2
-              </li><li class="list-group-item d-flex justify-content-between align-items-center">
-                Utilisateur 2
-              </li><li class="list-group-item d-flex justify-content-between align-items-center">
-                Utilisateur 2
-              </li><li class="list-group-item d-flex justify-content-between align-items-center">
-                Utilisateur 2
-              </li><li class="list-group-item d-flex justify-content-between align-items-center">
-                Utilisateur 2
-              </li><li class="list-group-item d-flex justify-content-between align-items-center">
-                Utilisateur 2
-              </li><li class="list-group-item d-flex justify-content-between align-items-center">
-                Utilisateur 2
-              </li><li class="list-group-item d-flex justify-content-between align-items-center">
-                Utilisateur 2
-              </li><li class="list-group-item d-flex justify-content-between align-items-center">
-                Utilisateur 2
-              </li><li class="list-group-item d-flex justify-content-between align-items-center">
-                Utilisateur 2
-              </li><li class="list-group-item d-flex justify-content-between align-items-center">
-                Utilisateur 2
-              </li><li class="list-group-item d-flex justify-content-between align-items-center">
-                Utilisateur 2
-              </li><li class="list-group-item d-flex justify-content-between align-items-center">
-                Utilisateur 2
-              </li><li class="list-group-item d-flex justify-content-between align-items-center">
-                Utilisateur 2
-              </li><li class="list-group-item d-flex justify-content-between align-items-center">
-                Utilisateur 2
-              </li><li class="list-group-item d-flex justify-content-between align-items-center">
-                Utilisateur 2
-              </li><li class="list-group-item d-flex justify-content-between align-items-center">
-                Utilisateur 2
-              </li><li class="list-group-item d-flex justify-content-between align-items-center">
-                Utilisateur 2
-              </li><li class="list-group-item d-flex justify-content-between align-items-center">
-                Utilisateur 2
-              </li><li class="list-group-item d-flex justify-content-between align-items-center">
-                Utilisateur 2
-              </li><li class="list-group-item d-flex justify-content-between align-items-center">
-                Utilisateur 2
-              </li><li class="list-group-item d-flex justify-content-between align-items-center">
-                Utilisateur 2
-              </li><li class="list-group-item d-flex justify-content-between align-items-center">
-                Utilisateur 2
-              </li><li class="list-group-item d-flex justify-content-between align-items-center">
-                Utilisateur 2
-              </li><li class="list-group-item d-flex justify-content-between align-items-center">
-                Utilisateur 2
-              </li><li class="list-group-item d-flex justify-content-between align-items-center">
-                Utilisateur 2
-              </li><li class="list-group-item d-flex justify-content-between align-items-center">
-                Utilisateur 2
-              </li><li class="list-group-item d-flex justify-content-between align-items-center">
-                Utilisateur 2
-              </li><li class="list-group-item d-flex justify-content-between align-items-center">
-                Utilisateur 2
-              </li><li class="list-group-item d-flex justify-content-between align-items-center">
-                Utilisateur 2
-              </li><li class="list-group-item d-flex justify-content-between align-items-center">
-                Utilisateur 2
-              </li><li class="list-group-item d-flex justify-content-between align-items-center">
-                Utilisateur 2
-              </li><li class="list-group-item d-flex justify-content-between align-items-center">
-                Utilisateur 2
-              </li><li class="list-group-item d-flex justify-content-between align-items-center">
-                Utilisateur 2
-              </li><li class="list-group-item d-flex justify-content-between align-items-center">
-                Utilisateur 2
-              </li><li class="list-group-item d-flex justify-content-between align-items-center">
-                Utilisateur 2
-              </li><li class="list-group-item d-flex justify-content-between align-items-center">
-                Utilisateur 2
-              </li><li class="list-group-item d-flex justify-content-between align-items-center">
-                Utilisateur 2
-              </li><li class="list-group-item d-flex justify-content-between align-items-center">
-                Utilisateur 2
               </li>
             </ul>
             </div>
@@ -182,7 +68,7 @@
           {# <div class="w-100"></div> #}
 
           <div class="col-9">
-              <div id="Messages" class="row overflow-scroll" style="max-height: 90vh;">
+              <div id="Messages" class="row" style="overflow-y:scroll;max-height: 90vh;">
                   <div class="float-end">
                       Hello. How are you today?
                       <span class="time-right">11:00</span>
@@ -203,290 +89,6 @@
                       <span class="time-left">11:05</span>
                       ...
                   </div><br>
-                  <div class="float-start">
-                      <span class="time-left">11:05</span>
-                      ...
-                  </div><br>
-                  <div class="float-start">
-                      <span class="time-left">11:05</span>
-                      ...
-                  </div><br>
-                  <div class="float-start">
-                      <span class="time-left">11:05</span>
-                      ...
-                  </div><br>
-                  <div class="float-start">
-                      <span class="time-left">11:05</span>
-                      ...
-                  </div><br>
-                  <div class="float-start">
-                      <span class="time-left">11:05</span>
-                      ...
-                  </div><br>
-                  <div class="float-start">
-                      <span class="time-left">11:05</span>
-                      ...
-                  </div><br>
-                  <div class="float-start">
-                      <span class="time-left">11:05</span>
-                      ...
-                  </div><br>
-                  <div class="float-start">
-                      <span class="time-left">11:05</span>
-                      ...
-                  </div><br>
-                  <div class="float-start">
-                      <span class="time-left">11:05</span>
-                      ...
-                  </div><br>
-                  <div class="float-start">
-                      <span class="time-left">11:05</span>
-                      ...
-                  </div><br>
-                  <div class="float-start">
-                      <span class="time-left">11:05</span>
-                      ...
-                  </div><br>
-                  <div class="float-start">
-                      <span class="time-left">11:05</span>
-                      ...
-                  </div><br>
-                  <div class="float-start">
-                      <span class="time-left">11:05</span>
-                      ...
-                  </div><br>
-                  <div class="float-start">
-                      <span class="time-left">11:05</span>
-                      ...
-                  </div><br>
-                  <div class="float-start">
-                      <span class="time-left">11:05</span>
-                      ...
-                  </div><br>
-                  <div class="float-start">
-                      <span class="time-left">11:05</span>
-                      ...
-                  </div><br>
-                  <div class="float-start">
-                      <span class="time-left">11:05</span>
-                      ...
-                  </div><br>
-                  <div class="float-start">
-                      <span class="time-left">11:05</span>
-                      ...
-                  </div><br>
-                  <div class="float-start">
-                      <span class="time-left">11:05</span>
-                      ...
-                  </div><br>
-                  <div class="float-start">
-                      <span class="time-left">11:05</span>
-                      ...
-                  </div><br>
-                  <div class="float-start">
-                      <span class="time-left">11:05</span>
-                      ...
-                  </div><br>
-                  <div class="float-start">
-                      <span class="time-left">11:05</span>
-                      ...
-                  </div><br>
-                  <div class="float-start">
-                      <span class="time-left">11:05</span>
-                      ...
-                  </div><br>
-                  <div class="float-start">
-                      <span class="time-left">11:05</span>
-                      ...
-                  </div><br>
-                  <div class="float-start">
-                      <span class="time-left">11:05</span>
-                      ...
-                  </div><br>
-                  <div class="float-start">
-                      <span class="time-left">11:05</span>
-                      ...
-                  </div><br>
-                  <div class="float-start">
-                      <span class="time-left">11:05</span>
-                      ...
-                  </div><br>
-                  <div class="float-start">
-                      <span class="time-left">11:05</span>
-                      ...
-                  </div><br>
-                  <div class="float-start">
-                      <span class="time-left">11:05</span>
-                      ...
-                  </div><br>
-                  <div class="float-start">
-                      <span class="time-left">11:05</span>
-                      ...
-                  </div><br>
-                  <div class="float-start">
-                      <span class="time-left">11:05</span>
-                      ...
-                  </div><br>
-                  <div class="float-start">
-                      <span class="time-left">11:05</span>
-                      ...
-                  </div><br>
-                  <div class="float-start">
-                      <span class="time-left">11:05</span>
-                      ...
-                  </div><br>
-                  <div class="float-start">
-                      <span class="time-left">11:05</span>
-                      ...
-                  </div><br>
-                  <div class="float-start">
-                      <span class="time-left">11:05</span>
-                      ...
-                  </div><br>
-                  <div class="float-start">
-                      <span class="time-left">11:05</span>
-                      ...
-                  </div><br>
-                  <div class="float-start">
-                      <span class="time-left">11:05</span>
-                      ...
-                  </div><br>
-                  <div class="float-start">
-                      <span class="time-left">11:05</span>
-                      ...
-                  </div><br>
-                  <div class="float-start">
-                      <span class="time-left">11:05</span>
-                      ...
-                  </div><br>
-                  <div class="float-start">
-                      <span class="time-left">11:05</span>
-                      ...
-                  </div><br>
-                  <div class="float-start">
-                      <span class="time-left">11:05</span>
-                      ...
-                  </div><br>
-                  <div class="float-start">
-                      <span class="time-left">11:05</span>
-                      ...
-                  </div><br>
-                  <div class="float-start">
-                      <span class="time-left">11:05</span>
-                      ...
-                  </div><br>
-                  <div class="float-start">
-                      <span class="time-left">11:05</span>
-                      ...
-                  </div><br>
-                  <div class="float-start">
-                      <span class="time-left">11:05</span>
-                      ...
-                  </div><br>
-                  <div class="float-start">
-                      <span class="time-left">11:05</span>
-                      ...
-                  </div><br>
-                  <div class="float-start">
-                      <span class="time-left">11:05</span>
-                      ...
-                  </div><br>
-                  <div class="float-start">
-                      <span class="time-left">11:05</span>
-                      ...
-                  </div><br>
-                  <div class="float-start">
-                      <span class="time-left">11:05</span>
-                      ...
-                  </div><br>
-                  <div class="float-start">
-                      <span class="time-left">11:05</span>
-                      ...
-                  </div><br>
-                  <div class="float-start">
-                      <span class="time-left">11:05</span>
-                      ...
-                  </div><br>
-                  <div class="float-start">
-                      <span class="time-left">11:05</span>
-                      ...
-                  </div><br>
-                  <div class="float-start">
-                      <span class="time-left">11:05</span>
-                      ...
-                  </div><br>
-                  <div class="float-start">
-                      <span class="time-left">11:05</span>
-                      ...
-                  </div><br>
-                  <div class="float-start">
-                      <span class="time-left">11:05</span>
-                      ...
-                  </div><br>
-                  <div class="float-start">
-                      <span class="time-left">11:05</span>
-                      ...
-                  </div><br>
-                  <div class="float-start">
-                      <span class="time-left">11:05</span>
-                      ...
-                  </div><br>
-                  <div class="float-start">
-                      <span class="time-left">11:05</span>
-                      ...
-                  </div><br>
-                  <div class="float-start">
-                      <span class="time-left">11:05</span>
-                      ...
-                  </div><br>
-                  <div class="float-start">
-                      <span class="time-left">11:05</span>
-                      ...
-                  </div><br>
-                  <div class="float-start">
-                      <span class="time-left">11:05</span>
-                      ...
-                  </div><br>
-                  <div class="float-start">
-                      <span class="time-left">11:05</span>
-                      ...
-                  </div><br>
-                  <div class="float-start">
-                      <span class="time-left">11:05</span>
-                      ...
-                  </div><br>
-                  <div class="float-start">
-                      <span class="time-left">11:05</span>
-                      ...
-                  </div><br>
-                  <div class="float-start">
-                      <span class="time-left">11:05</span>
-                      ...
-                  </div><br>
-                  <div class="float-start">
-                      <span class="time-left">11:05</span>
-                      ...
-                  </div><br>
-                  <div class="float-start">
-                      <span class="time-left">11:05</span>
-                      ...
-                  </div><br>
-                  <div class="float-start">
-                      <span class="time-left">11:05</span>
-                      ...
-                  </div><br>
-                  <div class="float-start">
-                      <span class="time-left">11:05</span>
-                      ...
-                  </div><br>
-                  <div class="float-start">
-                      <span class="time-left">11:05</span>
-                      ...
-                  </div><br>
-                  <div class="float-start">
-                      <span class="time-left">11:05</span>
-                      ...
-                  </div>
               </div>
 
               <div class="row" style="max-height: 10vh;">
