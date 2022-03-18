@@ -29,9 +29,11 @@ def group_page():
 @app.route("/api/send_message", methods=["POST"])
 def send_message():
     request_data = flask.request.form
-    group = request_data['group']
-    sender = current_user
+    group_id = request_data['group']
+    sender_id = current_user
     msg = request_data['msg']
+    group = db.session.query(Group).filter(Group.group_id == group_id).first()
+    sender = db.session.query(User).filter(User.user_id == sender_id).first()
 
     new_message = Message(msg=msg, date=datetime.today())
     new_message.sender = sender
@@ -40,8 +42,8 @@ def send_message():
     db.session.commit()
 
     message = {
-        "group": group,
-        "sender": sender,
+        "group": group_id,
+        "sender": sender_id,
         "msg": msg,
     }
 
@@ -50,13 +52,12 @@ def send_message():
 
 @app.route('/api/get_message/<group_id>')
 def get_messages(group_id):
-    messages = db.session.query(Message).filter(Group.group == group_id).all()
-
+    messages = db.session.query(Message).filter(Message.group_id == group_id).all()
     return flask.jsonify([
         {
-            "id": message.id,
+            "id": message.msg_id,
             "msg": message.msg,
-            "sender": message.sender,
+            "sender": message.sender_id,
             "date": message.date,
         }
         for message in messages
@@ -178,7 +179,7 @@ def create_group():
     new_group.users.append(user)
 
     db.session.commit()
-
+    print(new_group)
     message = {
         "group_id": new_group.group_id,
         "group_name": group_name,

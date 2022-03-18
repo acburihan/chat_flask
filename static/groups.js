@@ -29,7 +29,6 @@ function deleteGroup() {
       url: '/api/delete_group',
       data : {'group': 1},
     });
-    console.log("delGroup")
 }
 
 function showGroups(data) {
@@ -54,7 +53,6 @@ function addUser() {
       url: '/api/add_user',
       data : {'group': group, 'user': user},
     });
-    console.log("addUser")
 }
 
 function deleteUser() {
@@ -65,7 +63,6 @@ function deleteUser() {
       url: '/api/delete_user',
       data : {'group': group, 'user': user},
     });
-    console.log("delUser")
 }
 
 function showGroupUsers(data) {
@@ -99,5 +96,4 @@ function selectGroup() {
     $(this).children('button').attr('disabled', false);
     let group = $(this).attr("data-id");
     $.get('api/get_users/'+group, showGroupUsers);
-    console.log("selectGroup")
 }

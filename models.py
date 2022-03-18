@@ -22,7 +22,9 @@ class Group(db.Model):
 
 class Message(db.Model):
     msg_id = db.Column(db.Integer, primary_key=True)
-    group = db.ForeignKey('group.group_id')
-    sender = db.ForeignKey('user.user_id')
+    group_id = db.Column(db.Integer, db.ForeignKey('group.group_id'))
+    sender_id = db.Column(db.Integer, db.ForeignKey('user.user_id'))
+    group = db.relationship('Group', backref="message", cascade="all")
+    sender = db.relationship('User', backref="message", cascade="all")
     msg = db.Column(db.Text)
     date = db.Column(db.DateTime)
