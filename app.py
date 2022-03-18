@@ -58,6 +58,7 @@ def get_messages(group_id):
             "id": message.msg_id,
             "msg": message.msg,
             "sender": message.sender_id,
+            "current_user": current_user,
             "date": message.date,
         }
         for message in messages

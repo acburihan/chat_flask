@@ -31,7 +31,12 @@ function newMessage() {
 function showMessage(data) {
     $('#Messages').text("");
     for (let i=0 ; i<data.length ; i++) {
-        $('#Messages').append("<div id=\"message"+ data[i]['id'] +"\" class=\"float-end\"><span class=\"time-right\">" + data[i]['date'] + " </span>" + data[i]['msg'] + "</div><br>");
+        if (data[i]['sender'] === data[i]['current_user']) {
+            $('#Messages').append("<div data-id='" + data[i]['id'] + "' class='float-end'>" + data[i]['msg'] + " <span>" + data[i]['date'] + " </span></div><br>");
+        }
+        else {
+            $('#Messages').append("<div data-id='" + data[i]['id'] + "' class='float-start'><span>" + data[i]['date'] + " </span> " + data[i]['msg'] + "</div><br>");
+        }
     }
 }
 
