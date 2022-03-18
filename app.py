@@ -52,14 +52,34 @@ def send_message():
 
 @app.route('/api/get_message/<group_id>')
 def get_messages(group_id):
+
+    def position(sender):
+        if sender == current_user:
+            return "right"
+        else:
+            return "left"
+
+    def short_date(long_date):
+        today = datetime.today()
+        if long_date.year != today.year:
+            return long_date.date
+        elif long_date.day != today.day:
+            return long_date.strftime("%m/%d, %Hh")
+        elif long_date.hour != today.hour:
+            return long_date.strftime("%H:%M")
+        elif long_date.minute != today.minute:
+            return "Il y a " + str(long_date.minute-today.minute) + "min"
+        else:
+            return "Il y a " + str(long_date.second-today.second) + "s"
+
     messages = db.session.query(Message).filter(Message.group_id == group_id).all()
     return flask.jsonify([
         {
             "id": message.msg_id,
             "msg": message.msg,
             "sender": message.sender_id,
-            "current_user": current_user,
-            "date": message.date,
+            "position": position(message.sender_id),
+            "date": short_date(message.date),
         }
         for message in messages
     ])
