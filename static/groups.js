@@ -5,8 +5,6 @@ function onLoad () {
 
     $('#list_groups').on("click", "button.suppr_group", deleteGroup);
 
-    $('#buttonRefresh').on("click", refresh);
-
     $('#SearchUser').on("keyup", filterUser)
 
     $('#listUsers').on("click", "li a", addUser);

@@ -8,10 +8,20 @@ group_junction_table = db.Table('UsersInGroups',
                                 )
 
 
+message_junction_table = db.Table('MessageUnseenByUser',
+                                  db.Column('user_id', db.Integer, db.ForeignKey('user.user_id')),
+                                  db.Column('msg_id', db.Integer, db.ForeignKey('message.msg_id')),
+                                  db.PrimaryKeyConstraint('user_id', 'msg_id')
+                                  )
+
+
 class User(db.Model):
     user_id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.Text)
     password = db.Column(db.Text)
+    unseen = db.relationship('Message', backref='user', cascade="all", secondary=message_junction_table)
+    data_sent = db.Column(db.Integer)
+    data_received = db.Column(db.Integer)
 
 
 class Group(db.Model):

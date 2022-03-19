@@ -2,6 +2,7 @@ import flask
 from database.database import db, init_database
 from models import *
 from datetime import datetime
+from sqlalchemy import func
 
 app = flask.Flask(__name__)
 
@@ -26,6 +27,15 @@ def group_page():
     return flask.render_template("groups.html")
 
 
+@app.route('/api/get_current_user')
+def get_current_user():
+    current = db.session.query(User).filter(User.user_id == current_user).first()
+
+    return flask.jsonify({
+                "name": current.username,
+            })
+
+
 @app.route("/api/send_message", methods=["POST"])
 def send_message():
     request_data = flask.request.form
@@ -39,6 +49,13 @@ def send_message():
     new_message.sender = sender
     new_message.group = group
     db.session.add(new_message)
+
+    group_users = db.session.query(Group, User).join(Group.users).filter(Group.group_id == group_id,
+                                                                         User.user_id != current_user).all()
+
+    for user in group_users:
+        user[1].unseen.append(new_message)
+
     db.session.commit()
 
     message = {
@@ -50,39 +67,74 @@ def send_message():
     return flask.jsonify(message)
 
 
-@app.route('/api/get_message/<group_id>')
-def get_messages(group_id):
+def position(sender):
+    if sender == current_user:
+        return "right"
+    else:
+        return "left"
 
-    def position(sender):
-        if sender == current_user:
-            return "right"
-        else:
-            return "left"
 
-    def short_date(long_date):
-        today = datetime.today()
-        if long_date.year != today.year:
-            return long_date.date
-        elif long_date.day != today.day:
-            return long_date.strftime("%m/%d, %Hh")
-        elif long_date.hour != today.hour:
-            return long_date.strftime("%H:%M")
-        elif long_date.minute != today.minute:
-            return "Il y a " + str(long_date.minute-today.minute) + "min"
-        else:
-            return "Il y a " + str(long_date.second-today.second) + "s"
+def short_date(long_date):
+    today = datetime.today()
+    if long_date.year != today.year:
+        return long_date.date
+    elif long_date.day != today.day:
+        return long_date.strftime("%m/%d, à %H h")
+    elif long_date.hour != today.hour:
+        return long_date.strftime("%H:%M")
+    elif long_date.minute != today.minute:
+        return "Il y a " + str(today.minute-long_date.minute) + " min"
+    else:
+        return "Il y a " + str(today.second-long_date.second) + " s"
 
-    messages = db.session.query(Message).filter(Message.group_id == group_id).all()
-    return flask.jsonify([
-        {
-            "id": message.msg_id,
-            "msg": message.msg,
-            "sender": message.sender_id,
-            "position": position(message.sender_id),
-            "date": short_date(message.date),
-        }
-        for message in messages
-    ])
+
+@app.route('/api/get_all_message/<group_id>')
+def get_all_messages(group_id):
+    messages = db.session.query(Message, User).join(Message.sender).filter(Message.group_id == group_id).all()
+
+    result = []
+    for message in messages:
+        result.append(
+            {
+                "id": message[0].msg_id,
+                "msg": message[0].msg,
+                "sender": message[1].username,
+                "position": position(message[0].sender_id),
+                "date": short_date(message[0].date),
+            }
+        )
+
+    new_messages = db.session.query(Message, User).join(User.unseen).filter(Message.group_id == group_id,
+                                                                            User.user_id == current_user).all()
+    current = db.session.query(User).filter(User.user_id == current_user).first()
+    for message in new_messages:
+        current.unseen.remove(message[0])
+    db.session.commit()
+
+    return flask.jsonify(result)
+
+
+@app.route('/api/get_new_message/<group_id>')
+def get_new_messages(group_id):
+    sender = db.aliased(User)
+    new_messages = db.session.query(Message, User, sender).join(User.unseen).join(Message.sender)\
+        .filter(Message.group_id == group_id, User.user_id == current_user).all()
+    current = db.session.query(User).filter(User.user_id == current_user).first()
+
+    result = []
+    for message in new_messages:
+        result.append(
+            {
+                "id": message[0].msg_id,
+                "msg": message[0].msg,
+                "sender": message[2].username,
+                "position": position(message[0].sender_id),
+                "date": short_date(message[0].date),
+            }
+        )
+        current.unseen.remove(message)
+
+    return flask.jsonify(result)
 
 
 @app.route('/api/get_groups')
@@ -93,9 +145,8 @@ def get_groups():
     # new_user2 = User(username="User1", password="1111")
     # db.session.add(new_user2)
     # db.session.commit()
-    user_id = current_user
 
-    groups = db.session.query(Group, User).join(Group.users).filter(User.user_id == user_id).all()
+    groups = db.session.query(Group, User).join(Group.users).filter(User.user_id == current_user).all()
 
     return flask.jsonify([
         {
@@ -103,6 +154,20 @@ def get_groups():
             "group_name": group[0].name,
         }
         for group in groups
+    ])
+
+
+@app.route('/api/get_notifications')
+def get_notifications():
+    messages = db.session.query(Message, User, func.count(User.user_id)).join(User.unseen)\
+        .filter(User.user_id == current_user).group_by(Message.group_id).all()
+    #print(messages)
+    return flask.jsonify([
+        {
+            "group_id": msg[0].group_id,
+            "notifications": msg[2],
+        }
+        for msg in messages
     ])
 
 
@@ -114,9 +179,8 @@ def delete_group():
 
     group = db.session.query(Group).filter(Group.group_id == group_id).first()
     sender = db.session.query(User).filter(User.user_id == sender_id).first()
-    # db.session.no_autoflush()
+
     group.users.remove(sender)
-    # sender.groups.remove(group)
     db.session.commit()
 
     response = {
