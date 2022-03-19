@@ -3,7 +3,7 @@ $(onLoad)
 function onLoad () {
     $(refresh);
 
-    $('#send_message button').on('click', newMessage);
+    $('#send_message button').on('click', sendMessage);
 
     $('#buttonRefresh').on('click', refresh);
 
@@ -21,16 +21,17 @@ function showUserName(data) {
     $('.navbar-brand').text(data['name']);
 }
 
-function newMessage() {
+async function sendMessage() {
     let typed_msg = $('#send_message input').val(); //get the String value of the message
     let group = $('#list_groups a.active').attr("data-id"); //get the id of the group we're in
     //send the new message to the database
-    $.ajax({
+    await $.ajax({
       type: "POST",
       url: '/api/send_message',
       data : {'group': group, 'msg': typed_msg},
     });
     $('#send_message input').val(""); //Clear the input
+    $(refreshMessage); //Display the new message
 }
 
 function showMessage(data) {
@@ -46,13 +47,14 @@ function showMessage(data) {
             "                </div>" +
             "              </div>");
     }
+    $('#Messages').scrollTop(9999999);
 }
 
 function showGroups(data) {
     $('#list_groups').text("");
     for (let i=0 ; i<data.length ; i++) {
         $('#list_groups').append("<a href=\"#\" class=\"list-group-item list-group-item-action border-0"+ activate0(i) +"\" data-id=\"" + data[i]['group_id'] + "\">" +
-            "                            <div class=\"badge bg-success float-end\">0</div>" +
+            "                            <div class=\"badge notif-color float-end\">0</div>" +
             "                            <div class=\"d-flex align-items-start\">" +
             "                                <img src=\"https://bootdey.com/img/Content/avatar/avatar5.png\" class=\"rounded-circle mr-1\" alt=\"icon\" width=\"40\" height=\"40\">" +
             "                                <div class=\"flex-grow-1 ml-3\">" +
@@ -79,6 +81,12 @@ function showNewGroup() {
     $.get('/api/get_all_message/'+group, showMessage);
     //Change the notifications because we have probably seen what were unseen messages
     $.get('/api/get_notifications', notification);
+}
+
+async function refreshMessage() {
+    let group = $('#list_groups a.active').attr("data-id");
+    await $.get('/api/get_new_message/'+group, showMessage);
+    $('#Messages').scrollTop(9999999);
 }
 
 function notification(data) {

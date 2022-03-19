@@ -50,8 +50,7 @@ def send_message():
     new_message.group = group
     db.session.add(new_message)
 
-    group_users = db.session.query(Group, User).join(Group.users).filter(Group.group_id == group_id,
-                                                                         User.user_id != current_user).all()
+    group_users = db.session.query(Group, User).join(Group.users).filter(Group.group_id == group_id).all()
 
     for user in group_users:
         user[1].unseen.append(new_message)
@@ -117,9 +116,10 @@ def get_all_messages(group_id):
 @app.route('/api/get_new_message/<group_id>')
 def get_new_messages(group_id):
     sender = db.aliased(User)
-    new_messages = db.session.query(Message, User, sender).join(User.unseen).join(Message.sender)\
-        .filter(Message.group_id == group_id, User.user_id == current_user).all()
-    current = db.session.query(User).filter(User.user_id == current_user).first()
+    user_now = db.aliased(User)
+    new_messages = db.session.query(Message, user_now, sender)\
+        .join(Message, user_now.unseen).join(sender, Message.sender)\
+        .filter(Message.group_id == group_id, user_now.user_id == current_user).all()
 
     result = []
     for message in new_messages:
@@ -132,7 +132,8 @@ def get_new_messages(group_id):
                 "date": short_date(message[0].date),
             }
         )
-        current.unseen.remove(message)
+        message[1].unseen.remove(message[0])
+    db.session.commit()
 
     return flask.jsonify(result)
 
@@ -161,7 +162,6 @@ def get_groups():
 def get_notifications():
     messages = db.session.query(Message, User, func.count(User.user_id)).join(User.unseen)\
         .filter(User.user_id == current_user).group_by(Message.group_id).all()
-    #print(messages)
     return flask.jsonify([
         {
             "group_id": msg[0].group_id,
@@ -264,7 +264,6 @@ def create_group():
     new_group.users.append(user)
 
     db.session.commit()
-    print(new_group)
     message = {
         "group_id": new_group.group_id,
         "group_name": group_name,
