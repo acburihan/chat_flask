@@ -27,6 +27,11 @@ def group_page():
     return flask.render_template("groups.html")
 
 
+@app.route('/login')
+def login_page():
+    return flask.render_template("login.html")
+
+
 @app.route('/api/get_current_user')
 def get_current_user():
     current = db.session.query(User).filter(User.user_id == current_user).first()
