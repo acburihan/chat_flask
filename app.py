@@ -160,11 +160,11 @@ def get_groups():
 
 @app.route('/api/get_notifications')
 def get_notifications():
-    messages = db.session.query(Message, User, func.count(User.user_id)).join(User.unseen)\
+    messages = db.session.query(Message.group_id, User, func.count(User.user_id)).join(Message, User.unseen)\
         .filter(User.user_id == current_user).group_by(Message.group_id).all()
     return flask.jsonify([
         {
-            "group_id": msg[0].group_id,
+            "group_id": msg[0],
             "notifications": msg[2],
         }
         for msg in messages
