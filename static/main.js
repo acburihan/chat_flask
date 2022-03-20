@@ -9,7 +9,11 @@ function onLoad () {
 
     $('#list_groups').on("click","a", selectGroup);
 
-    $('#SearchGroup').on("keyup", filterGroup)
+    $('#SearchGroup').on("keyup", filterGroup);
+
+    setInterval(refreshMessage, 60000);
+
+    setInterval(refreshNotification,60000);
 }
 
 function refresh() {
@@ -80,13 +84,17 @@ function showNewGroup() {
     $('#Messages').text("");
     $.get('/api/get_all_message/'+group, showMessage);
     //Change the notifications because we have probably seen what were unseen messages
-    $.get('/api/get_notifications', notification);
+    $(refreshNotification);
 }
 
 async function refreshMessage() {
     let group = $('#list_groups a.active').attr("data-id");
     await $.get('/api/get_new_message/'+group, showMessage);
     $('#Messages').scrollTop(9999999);
+}
+
+function refreshNotification() {
+    $.get('/api/get_notifications', notification);
 }
 
 function notification(data) {
@@ -101,6 +109,7 @@ function filterGroup() {
     return !($(this).text().toUpperCase().includes(filter));
   }).hide();
 }
+
 
 function activate0(i) {
     if (i===0) {
