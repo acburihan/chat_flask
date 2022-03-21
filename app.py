@@ -35,11 +35,9 @@ def group_page():
     return flask.render_template("groups.html")
 
 
-# @app.route('/login', methods=['GET', 'POST'])
-# def login_page():
-#     # login_form = LogIn()
-#     signup_form = SignUp()
-#     return flask.render_template("login.html", signup_form=signup_form) # , login_form=login_form
+@app.route('/login')
+def login_page():
+    return flask.render_template("login.html")
 
 
 @app.route('/signup')
