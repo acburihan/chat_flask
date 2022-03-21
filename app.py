@@ -57,7 +57,7 @@ def signup_api():
     db.session.add(new_user)
 
     db.session.commit()
-    return flask.render_template("signup.html")
+    return flask.render_template("index.html.jinja2")
 
 @app.route('/api/get_current_user')
 def get_current_user():
@@ -302,36 +302,6 @@ def create_group():
     }
 
     return flask.jsonify(message)
-
-
-# class UserAuth(db.Model, UserMixin):
-#     id = db.Column(db.Integer, primary_key=True)
-#     username = db.Column(db.String(20), nullable=False, unique=True)
-#     email = db.Column(db.String(40), nullable=False, unique=True)
-#     password = db.Column(db.String(128), nullable=False)
-#
-#
-# class SignUp(FlaskForm):
-#     username = StringField(validators=[InputRequired(), Length(min=3, max=20)])
-#     email = StringField(validators=[InputRequired(), Length(min=5, max=40)])
-#     password = PasswordField(validators=[InputRequired(), Length(min=8, max=20)])
-#     submit = SubmitField()
-#
-#     def check_username(self, username):
-#         unavailable_username = UserAuth.query.filter_by(username=username.data).first()
-#         if unavailable_username:
-#             raise ValidationError("This username was already chosen")
-#
-#     def check_email(self, email):
-#         unavailable_email = UserAuth.query.filter_by(email=email.data).first()
-#         if unavailable_email:
-#             raise ValidationError("This email is already in use")
-#
-#
-# class LogIn(FlaskForm):
-#     email = StringField(validators=[InputRequired(), Length(min=5, max=40)])
-#     password = PasswordField(validators=[InputRequired(), Length(min=8, max=20)])
-#     submit = SubmitField()
 
 
 if __name__ == '__main__':
