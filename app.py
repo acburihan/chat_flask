@@ -35,6 +35,11 @@ def group_page():
     return flask.render_template("groups.html")
 
 
+@app.route('/dashboard')
+def dashboard_page():
+    return flask.render_template("dashboard.html")
+
+
 @app.route('/login')
 def login_page():
     return flask.render_template("login.html")
@@ -43,6 +48,7 @@ def login_page():
 @app.route('/signup')
 def signup_page():
     return flask.render_template("signup.html")
+
 
 @app.route('/api/signup', methods=['GET', 'POST'])
 def signup_api():
@@ -56,6 +62,7 @@ def signup_api():
 
     db.session.commit()
     return flask.render_template("index.html.jinja2")
+
 
 @app.route('/api/get_current_user')
 def get_current_user():
