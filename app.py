@@ -79,9 +79,9 @@ def send_message():
 
 def position(sender):
     if sender == current_user:
-        return "right"
+        return "right mb-4"
     else:
-        return "left"
+        return "left pb-4"
 
 
 def short_date(long_date):
@@ -93,9 +93,9 @@ def short_date(long_date):
     elif long_date.hour != today.hour:
         return long_date.strftime("%H:%M")
     elif long_date.minute != today.minute:
-        return "Il y a " + str(today.minute-long_date.minute) + " min"
+        return str(today.minute-long_date.minute) + " min"
     else:
-        return "Il y a " + str(today.second-long_date.second) + " s"
+        return str(today.second-long_date.second) + " sec"
 
 
 @app.route('/api/get_all_message/<group_id>')

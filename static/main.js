@@ -14,7 +14,8 @@ function onLoad () {
     $('#form-popup button').on('click', sendImage);
 
     $('#Messages').on('click', ".message-image", expandImage);
-    $('#ModalImage span').on('click', function() {$('#ModalImage').hide()})
+    $('#ModalImage span').on('click', function() {$('#ModalImage').hide()});
+    $('#ModalImage button').on('click', function() {$(this).attr("disabled", true)});
 
     setInterval(refreshMessage, 6000000);
 
@@ -31,7 +32,7 @@ function showUserName(data) {
 }
 
 async function sendMessage() {
-    let typed_msg = $('#send_message :visible input').val(); //get the String value of the message
+    let typed_msg = $('#send_message :visible textarea').val(); //get the String value of the message
     let group = $('#list_groups a.active').attr("data-id"); //get the id of the group we're in
     //send the new message to the database
     await $.ajax({
@@ -39,20 +40,20 @@ async function sendMessage() {
       url: '/api/send_message',
       data : {'group': group, 'msg': typed_msg},
     });
-    $('#send_message :visible input').val(""); //Clear the input
+    $('#send_message :visible textarea').val(""); //Clear the input
     $(refreshMessage); //Display the new message
 }
 
 function showMessage(data) {
     for (let i=0 ; i<data.length ; i++) {
-        $('#Messages').append("<div class=\"chat-message-" + data[i]['position'] + " pb-4\" data-id=\"" + data[i]['id'] + "\">" +
+        $('#Messages').append("<div class=\"chat-message-" + data[i]['position'] + "\" data-id=\"" + data[i]['id'] + "\">" +
             "                <div>" +
                                showImage(data[i]["sender_avatar"], true) +
             "                  <div class=\"text-muted small text-nowrap mt-2\">" + data[i]['date'] + "</div>" +
             "                </div>" +
-            "                <div class=\"flex-shrink-1 bubble-color rounded py-2 px-3 ml-3\">" +
+            "                <div class=\"flex-shrink-1 bubble-color rounded py-2 px-3 m"+data[i]['position'].charAt(0)+"-3\">" +
             "                  <div class=\"font-weight-bold mb-1\">"+replaceNameByVous(data[i]['position'], data[i]['sender'])+"</div>" +
-                                data[i]['msg'] + showImage(data[i]['image']) +
+                                "<div style=\"white-space: pre-wrap;\">" + data[i]['msg'] + "</div>" + showImage(data[i]['image']) +
             "                </div>" +
             "              </div>");
     }
@@ -73,7 +74,7 @@ function showGroups(data) {
             "                        </a>");
         $('#send_message').append("<div class=\"input-group\" data-id=\""+ data[i]['group_id'] +"\" style='display: none'>" +
             "              <button type=\"button\" class=\"btn btn-primary popup\"><h8>↑</h8></button>" +
-            "              <input type=\"text\" class=\"form-control\" placeholder=\"Écrivez un message...\">" +
+            "              <textarea type=\"text\" class=\"form-control\" placeholder=\"Écrivez un message...\"></textarea>" +
             "              <button type=\"submit\" class=\"btn btn-primary\">Envoyer</button>" +
             "            </div>");
     }
@@ -159,7 +160,10 @@ function showImage(filename, icon=false) {
 
 function expandImage() {
     $('#ModalImage').show();
-    $('#ModalImage img').attr("src", ($(this).attr("src")));
+    let imageSource = $(this).attr("src");
+    $('#ModalImage img').attr("src", imageSource);
+    $('#ModalImage a').attr("href", imageSource).attr("download", imageSource.substring(imageSource.lastIndexOf('/')+1, imageSource.length));
+    $('#ModalImage button').attr("disabled", false);
 }
 
 
@@ -189,7 +193,7 @@ function compareGroup() {
 }
 
 function replaceNameByVous(position, name) {
-    if (position === "right") {
+    if (position === "right mb-4") {
         return "Vous"
     }
     else {
