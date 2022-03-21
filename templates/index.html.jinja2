@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="fr">
+<html lang="fr" xmlns="http://www.w3.org/1999/html">
   <head>
       <meta charset="utf-8">
       <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
@@ -60,6 +60,92 @@
                 overflow-y: scroll
             }
 
+            #form-popup {
+                display: none;
+                position: absolute;
+                z-index: 9;
+                width: 50vh;
+                bottom: 8vh;
+                background: rgba(13, 110, 252, 0.61);
+                border-radius: 25px;
+            }
+
+            .btn:focus {
+              outline: none;
+              box-shadow: none;
+            }
+
+            #form-popup .btn {
+                position: absolute;
+                z-index: 10;
+                width: 2vh;
+                bottom: 0vh;
+                background: linear-gradient(to right, rgba(13, 110, 252, 0), rgb(13, 110, 252));
+                border-radius: 0 25px 25px 0;
+                height: 9.6vh;
+                right: 0.08vh;
+                border: none;
+            }
+
+            /* The Modal */
+
+            .message-image:hover {opacity: 0.7;}
+
+            .modal {
+                display: none; /* Hidden by default */
+                position: fixed; /* Stay in place */
+                z-index: 999; /* Sit on top */
+                padding-top: 100px; /* Location of the box */
+                left: 0;
+                top: 0;
+                width: 100%; /* Full width */
+                height: 100%; /* Full height */
+                overflow: auto; /* Enable scroll if needed */
+                background-color: rgb(0,0,0); /* Fallback color */
+                background-color: rgba(0,0,0,0.9); /* Black w/ opacity */
+            }
+
+            .modal-content {
+                margin: auto;
+                display: block;
+                max-width: 60vw;
+                max-height: 60vh;
+            }
+
+            /* Add Animation - Zoom in the Modal */
+            .modal-content {
+                animation-name: zoom;
+                animation-duration: 0.6s;
+            }
+
+            @keyframes zoom {
+                from {transform:scale(0)}
+                to {transform:scale(1)}
+            }
+
+            .close {
+                position: absolute;
+                top: 8vh;
+                right: 18vw;
+                color: #f1f1f1;
+                font-size: 40px;
+                font-weight: bold;
+                transition: 0.3s;
+            }
+
+            .close:hover,
+            .close:focus {
+                color: #bbb;
+                text-decoration: none;
+                cursor: pointer;
+            }
+
+            /* 100% Image Width on Smaller Screens */
+            @media only screen and (max-width: 700px){
+              .modal-content {
+                  width: 100%;
+              }
+            }
       </style>
   </head>
   <body>
@@ -131,17 +217,21 @@
 						</div>
 					</div>
 
-					<div class="flex-grow-0 py-3 px-4 border-top" style="height: 10vh">
-						<div id="send_message" class="input-group">
-							<input type="text" class="form-control" placeholder="Écrivez un message...">
-							<button type="button" class="btn btn-primary">Envoyer</button>
-						</div>
-					</div>
+					<div id="send_message" class="flex-grow-0 py-3 px-4 border-top" style="height: 10vh">
 
+					</div>
+                    <div id="form-popup">
+                        <input class="modal-body" type="file" name="file">
+                        <button type="submit" class="modal-body btn">↲</button>
+                    </div>
 				</div>
 			</div>
 		</div>
 	</div>
 </main>
+<div id="ModalImage" class="modal">
+  <span class="close">&times;</span>
+  <img class="modal-content">
+</div>
   </body>
 </html>
