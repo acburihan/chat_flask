@@ -35,12 +35,29 @@ def group_page():
     return flask.render_template("groups.html")
 
 
-@app.route('/login', methods=['GET', 'POST'])
-def login_page():
-    # login_form = LogIn()
-    signup_form = SignUp()
-    return flask.render_template("login.html", signup_form=signup_form) # , login_form=login_form
+# @app.route('/login', methods=['GET', 'POST'])
+# def login_page():
+#     # login_form = LogIn()
+#     signup_form = SignUp()
+#     return flask.render_template("login.html", signup_form=signup_form) # , login_form=login_form
 
+
+@app.route('/signup')
+def signup_page():
+    return flask.render_template("signup.html")
+
+@app.route('/api/signup', methods=['GET', 'POST'])
+def signup_api():
+    request_data = flask.request.form
+    username = request_data['username']
+    email = request_data['email']
+    password = request_data['password']
+
+    new_user = User(username=username, email=email, password=password)
+    db.session.add(new_user)
+
+    db.session.commit()
+    return flask.render_template("signup.html")
 
 @app.route('/api/get_current_user')
 def get_current_user():
@@ -287,34 +304,34 @@ def create_group():
     return flask.jsonify(message)
 
 
-class UserAuth(db.Model, UserMixin):
-    id = db.Column(db.Integer, primary_key=True)
-    username = db.Column(db.String(20), nullable=False, unique=True)
-    email = db.Column(db.String(40), nullable=False, unique=True)
-    password = db.Column(db.String(128), nullable=False)
-
-
-class SignUp(FlaskForm):
-    username = StringField(validators=[InputRequired(), Length(min=3, max=20)])
-    email = StringField(validators=[InputRequired(), Length(min=5, max=40)])
-    password = PasswordField(validators=[InputRequired(), Length(min=8, max=20)])
-    submit = SubmitField()
-
-    def check_username(self, username):
-        unavailable_username = UserAuth.query.filter_by(username=username.data).first()
-        if unavailable_username:
-            raise ValidationError("This username was already chosen")
-
-    def check_email(self, email):
-        unavailable_email = UserAuth.query.filter_by(email=email.data).first()
-        if unavailable_email:
-            raise ValidationError("This email is already in use")
-
-
-class LogIn(FlaskForm):
-    email = StringField(validators=[InputRequired(), Length(min=5, max=40)])
-    password = PasswordField(validators=[InputRequired(), Length(min=8, max=20)])
-    submit = SubmitField()
+# class UserAuth(db.Model, UserMixin):
+#     id = db.Column(db.Integer, primary_key=True)
+#     username = db.Column(db.String(20), nullable=False, unique=True)
+#     email = db.Column(db.String(40), nullable=False, unique=True)
+#     password = db.Column(db.String(128), nullable=False)
+#
+#
+# class SignUp(FlaskForm):
+#     username = StringField(validators=[InputRequired(), Length(min=3, max=20)])
+#     email = StringField(validators=[InputRequired(), Length(min=5, max=40)])
+#     password = PasswordField(validators=[InputRequired(), Length(min=8, max=20)])
+#     submit = SubmitField()
+#
+#     def check_username(self, username):
+#         unavailable_username = UserAuth.query.filter_by(username=username.data).first()
+#         if unavailable_username:
+#             raise ValidationError("This username was already chosen")
+#
+#     def check_email(self, email):
+#         unavailable_email = UserAuth.query.filter_by(email=email.data).first()
+#         if unavailable_email:
+#             raise ValidationError("This email is already in use")
+#
+#
+# class LogIn(FlaskForm):
+#     email = StringField(validators=[InputRequired(), Length(min=5, max=40)])
+#     password = PasswordField(validators=[InputRequired(), Length(min=8, max=20)])
+#     submit = SubmitField()
 
 
 if __name__ == '__main__':
