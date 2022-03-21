@@ -40,6 +40,10 @@
                 white-space: normal;
             }
 
+            .highlighted .bubble-color {
+                border: thick solid rgb(13, 110, 252);
+            }
+
             .notif-color {
                 background-color: rgba(248, 50, 15, 0.94) !important;
             }
@@ -74,8 +78,8 @@
                 display: none;
                 position: absolute;
                 z-index: 9;
-                width: 50vh;
-                bottom: 8vh;
+                width: 28.25%;
+                bottom: 10%;
                 background: rgba(13, 110, 252, 0.61);
                 border-radius: 25px;
             }
@@ -88,12 +92,11 @@
             #form-popup .btn {
                 position: absolute;
                 z-index: 10;
-                width: 2vh;
-                bottom: 0vh;
+                width: 0;
                 background: linear-gradient(to right, rgba(13, 110, 252, 0), rgb(13, 110, 252));
                 border-radius: 0 25px 25px 0;
-                height: 9.6vh;
-                right: 0.08vh;
+                height: 100%;
+                right: 0%;
                 border: none;
             }
 
@@ -161,32 +164,96 @@
                   width: 100%;
               }
             }
+
+            /* Search message */
+
+            #search_message {
+                list-style-type: none;
+                position : absolute;
+                padding: 0;
+                margin: 0;
+                top: 1.5vh;
+                left: 75vw;
+                z-index: 20;
+                width: 20vw;
+            }
+
+            #search_message .list-search {
+                display: none;
+                max-height: 40vh;
+                overflow-y: auto;
+                overflow-x: hidden;
+            }
+
+            #search_message .list-search a {
+                border: 1px solid #ddd;
+                margin-top: -1px;
+                background-color: #f6f6f6;
+                padding: 0rem 0rem;
+                text-decoration: none;
+                font-size: 18px;
+                color: black;
+                display: block;
+                height: 8vh;
+                width: 100%;
+            }
+
+            .search-content div {
+                position: relative;
+                left: 0.75rem;
+                top: 0.5rem;
+            }
+            .search-content img {
+                position: relative;
+                left: 1rem;
+                top: 0.1rem;
+            }
+
+            #search_message a:hover:not(.header) {
+                background-color: #eee;
+            }
+
+            #search_image {
+                display:block;
+                border:0 none;
+                border-radius: 10px;
+                outline:none;
+                position: relative;
+                left: 17vw;
+                bottom: 4.7vh;
+            }
+
+            #search_image.active {
+                background-color: rgba(13, 110, 252);
+            }
       </style>
   </head>
   <body>
       <nav class="navbar navbar-expand-lg navbar-dark bg-dark" style="max-height: 10vh;">
-         <div class="container-fluid">
-          <a class="navbar-brand" href="/">User</a>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button>
+          <div class="container-fluid">
+              <a class="navbar-brand" href="/">User</a>
+              <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+                  <span class="navbar-toggler-icon"></span>
+              </button>
+              <div class="collapse navbar-collapse" id="navbarColor01">
+                  <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                      <li class="nav-item">
+                          <a class="nav-link" aria-current="page" href="#">Paramètres</a>
+                      </li>
+                      <li class="nav-item">
+                          <a class="nav-link" href="groups">Créer groupe</a>
+                      </li>
+                  </ul>
+                  <div id="search_message">
+                      <input class="form-control me-2" type="search" aria-label="Search" placeholder="Rechercher un message"/>
+                      <button id="search_image" class="">IMG</button>
+                      <div class="list-search" >
 
-          <div class="collapse navbar-collapse" id="navbarColor01">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-              <li class="nav-item">
-                <a class="nav-link" aria-current="page" href="#">Paramètres</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="groups">Créer groupe</a>
-              </li>
-            </ul>
-            <form class="d-flex">
-              <input class="form-control me-2" type="search" aria-label="Search" />
-              <button class="btn btn-outline-success" type="submit">Recherche</button>
-            </form>
+                      </div>
+                  </div>
+              </div>
           </div>
-         </div>
-        </nav>
+      </nav>
 
 <main class="content">
     <div class="container p-0">
@@ -236,7 +303,7 @@
 
 					</div>
                     <div id="form-popup">
-                        <input class="modal-body" type="file" name="file">
+                        <input class="modal-body" type="file" name="file" style="overflow: hidden; width: 95%">
                         <button type="submit" class="modal-body btn">↲</button>
                     </div>
 				</div>

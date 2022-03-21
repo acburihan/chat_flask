@@ -98,8 +98,28 @@ def short_date(long_date):
         return str(today.second-long_date.second) + " sec"
 
 
+@app.route('/api/get_all_group_message')
+def get_all_group_message():
+    messages = db.session.query(Message, User).join(Message.sender).all()
+
+    result = []
+    for message in messages:
+        result.append(
+            {
+                "id": message[0].msg_id,
+                "msg": message[0].msg,
+                "sender": message[1].username,
+                "sender_avatar": message[1].avatar,
+                "group": message[0].group_id,
+                "date": short_date(message[0].date),
+                "image": message[0].image,
+            }
+        )
+
+    return flask.jsonify(result)
+
 @app.route('/api/get_all_message/<group_id>')
-def get_all_messages(group_id):
+def get_all_message(group_id):
     messages = db.session.query(Message, User).join(Message.sender).filter(Message.group_id == group_id).all()
 
     result = []

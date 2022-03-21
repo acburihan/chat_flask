@@ -17,14 +17,29 @@ function onLoad () {
     $('#ModalImage span').on('click', function() {$('#ModalImage').hide()});
     $('#ModalImage button').on('click', function() {$(this).attr("disabled", true)});
 
+    $('#search_message').on("click", function() {$('#search_message .list-search').show()});
+    $('#search_message').mouseleave(async function() {$('#search_message .list-search').hide();
+                                                      $('#search_message input').blur();
+                                                      await new Promise(r => setTimeout(r, 500));
+                                                      $('#Messages').children().removeClass("highlighted")});
+    $('#search_message input').on("keyup", filterMessage);
+    $('#search_message .list-search').on("click", "a", goToMessage);
+    $('#search_image').on("click", function() {$(this).toggleClass("active");
+                                               $('#search_message input').focus();
+                                               $(filterMessage)})
+
     setInterval(refreshMessage, 6000000);
 
     setInterval(refreshNotification,6000000);
 }
-
-function refresh() {
-        $.get('/api/get_current_user', showUserName);
-        $.get('/api/get_groups', showGroups);
+let timeout;
+async function refresh() {
+    var startTime = performance.now();
+    await $.get('/api/get_current_user', showUserName);
+    await $.get('/api/get_groups', showGroups);
+    await $.get('api/get_all_group_message', addAllMessage);
+    var endTime = performance.now();
+    timeout = endTime-startTime + 30;
     }
 
 function showUserName(data) {
@@ -42,6 +57,21 @@ async function sendMessage() {
     });
     $('#send_message :visible textarea').val(""); //Clear the input
     $(refreshMessage); //Display the new message
+}
+
+function addAllMessage(data) {
+    data.reverse();
+    for (let i=0 ; i<data.length ; i++) {
+        $('#search_message .list-search').append("<a href=\"#\" class=\"list-group-item list-group-item-action\" data-id=\"" + data[i]['id'] + "\">" +
+            "                                        <div class=\"d-flex align-items-start\" data-id=\"" + data[i]['group'] + "\">" +
+            "                                          <div class=\"search-content\" data-id=\""+ data[i]['msg'] +"\">" +
+                                                            "<div style='display: inline; font-size: .75em;'>" + data[i]['date'] + " </div>" +
+                                                            "<div style='display: inline;'>" + data[i]["sender"] + " : </div>" +
+                                                            "<div style='display: inline;'>" + data[i]['msg'].substring(0,8) + "</div>" + "<div class='image_div' data-id='"+ data[i]['image'] +"' style='display: inline;'>" + showImage(data[i]['image'], false, true) + "</div>" +
+            "                                          </div>" +
+            "                                       </div>" +
+            "                                    </a>")
+    }
 }
 
 function showMessage(data) {
@@ -66,13 +96,13 @@ function showGroups(data) {
         $('#list_groups').append("<a href=\"#\" class=\"list-group-item list-group-item-action border-0\" data-id=\"" + data[i]['group_id'] + "\">" +
             "                            <div class=\"badge notif-color float-end\">0</div>" +
             "                            <div class=\"d-flex align-items-start\">" +
-                                             showImage(data[i]["icon"], true) +
+            showImage(data[i]["icon"], true) +
             "                                <div class=\"flex-grow-1 ml-3\">" +
-                                                data[i]['group_name'] +
+            data[i]['group_name'] +
             "                                </div>" +
             "                            </div>" +
             "                        </a>");
-        $('#send_message').append("<div class=\"input-group\" data-id=\""+ data[i]['group_id'] +"\" style='display: none'>" +
+        $('#send_message').append("<div class=\"input-group\" data-id=\"" + data[i]['group_id'] + "\" style='display: none'>" +
             "              <button type=\"button\" class=\"btn btn-primary popup\"><h8>↑</h8></button>" +
             "              <textarea type=\"text\" class=\"form-control\" placeholder=\"Écrivez un message...\"></textarea>" +
             "              <button type=\"submit\" class=\"btn btn-primary\">Envoyer</button>" +
@@ -93,13 +123,13 @@ function selectGroup() {
     $(showNewGroup);
 }
 
-async function showNewGroup() {
+function showNewGroup() {
     let group_name = $('#list_groups a.active div.ml-3').text();
     $('#ActionGroup strong').text(group_name);
     //Clearing the messages of the old group and displaying all the messages of the new group
     let group = $('#list_groups a.active').attr("data-id");
     $('#Messages').text("");
-    await $.get('/api/get_all_message/'+group, showMessage);
+    $.get('/api/get_all_message/'+group, showMessage);
 }
 
 async function refreshMessage() {
@@ -135,11 +165,11 @@ async function sendImage() {
         processData: false,
     });
     $('#form-popup input').val("");
-    $(popupForm)
+    $('#form-popup').toggle();
     $(refreshMessage);
 }
 
-function showImage(filename, icon=false) {
+function showImage(filename, icon=false, search =false) {
     if (icon) {
         if (filename === null) {
             return "<img src=\"../../static/image/icone_par_defaut.png\" class=\"rounded-circle mr-1\" alt=\"icon\" width=\"40\" height=\"40\">"
@@ -151,6 +181,9 @@ function showImage(filename, icon=false) {
     else {
         if (filename === null) {
             return ""
+        }
+        else if (search) {
+            return "<img src=\"/uploads/"+filename+"\" class=\"img-rounded mr-1\" alt=\"image\" style=\"height: 7vh;\">"
         }
         else {
             return "<img src=\"/uploads/"+filename+"\" class=\"message-image img-rounded mr-1\" alt=\"image\" style=\"max-height: 40vh; max-width: 40vh\">"
@@ -172,6 +205,33 @@ function filterGroup() {
   $('#list_groups a').show().filter(function() {
     return !($(this).text().toUpperCase().includes(filter));
   }).hide();
+}
+
+function filterMessage() {
+    let filter = $("#search_message input").val().toUpperCase();
+    $('#search_message .list-search a').show().filter(function() {
+        if ($('#search_image').hasClass("active")) {
+            return ($(this).children().children('.search-content').children('.image_div').attr("data-id") === "null") || !($(this).children().children('.search-content').children('.image_div').attr("data-id").toUpperCase().includes(filter));
+        }
+        else {
+            return ($(this).children().children('.search-content').attr("data-id") === "") || !($(this).children().children('.search-content').attr("data-id").toUpperCase().includes(filter));
+        }
+    }).hide();
+}
+
+async function goToMessage() {
+    let message_id = $(this).attr("data-id");
+    let group_of_message = $(this).children().attr("data-id");
+    let active_group = $('#list_groups a.active').attr("data-id");
+    if (active_group === group_of_message) {}
+    else {
+        selectGroup.apply($('#list_groups').children('[data-id="' + group_of_message + '"]')[0]);
+        await new Promise(r => setTimeout(r, timeout));
+    }
+    let target_message = $('#Messages').children('[data-id="'+message_id+'"]')[0];
+    $('#Messages').animate({scrollTop: target_message.offsetTop -20}, 1000);
+    $('#Messages').children().removeClass("highlighted")
+    $(target_message).addClass("highlighted");
 }
 
 function sortGroup() {
