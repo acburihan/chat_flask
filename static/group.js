@@ -19,7 +19,13 @@ function onLoad () {
 function refresh() {
         $.get('/api/get_groups', showGroups);
         $.get('api/get_all_users', showUsers);
-    }
+        $.get('/api/get_current_user', showUserName);
+}
+
+
+function showUserName(data) {
+    $('.navbar-brand').text(data['name']);
+}
 
 function deleteGroup() {
     $.ajax({
