@@ -56,9 +56,19 @@ def group():
     return flask.render_template("group.html")
 
 
-@app.route('/dashboard')
+@app.route('/dashboard', methods=['GET', 'POST'])
 def dashboard():
-    return flask.render_template("dashboard.html")
+    sent = db.session.query(Message).filter(Message.sender_id == current_user).all()
+    s_vol = 0
+    for s in sent:
+        s_vol += sys.getsizeof(s)
+
+    received = db.session.query(Message).filter(Message.sender_id != current_user).all()
+    r_vol = 0
+    for r in received:
+        r_vol += sys.getsizeof(r)
+
+    return flask.render_template("dashboard.html.jinja2", sent=len(sent), sent_volume=s_vol, received=len(received), received_volume=r_vol)
 
 
 @app.route('/api/login', methods=['GET', 'POST'])
