@@ -226,6 +226,31 @@
             #search_image.active {
                 background-color: rgba(13, 110, 252);
             }
+
+            .delete-msg {
+                display:block;
+                border:0 none;
+                outline:none;
+                position: relative;
+                top: 30%;
+                right: 2%;
+                height: 40%;
+                width: 40%;
+                border-radius: 50%;
+                background-color: rgba(13, 110, 252);
+                opacity: 0.3;
+            }
+
+            .delete-msg:hover {
+                opacity: 0.8;
+            }
+
+            .delete-msg::before {
+                content: 'X';
+                color: #fff;
+                font-weight: 300;
+                font-family: Arial, sans-serif;
+            }
       </style>
   </head>
   <body>

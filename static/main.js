@@ -25,7 +25,9 @@ function onLoad () {
     $('#search_message .list-search').on("click", "a", goToMessage);
     $('#search_image').on("click", function() {$(this).toggleClass("active");
                                                $('#search_message input').focus();
-                                               $(filterMessage)})
+                                               $(filterMessage)});
+
+    $('#Messages').on("click", ".delete-msg", deleteMessage);
 
     setInterval(refreshMessage, 6000000);
     setInterval(refreshNotification,6000000);
@@ -82,7 +84,7 @@ function showMessage(data) {
             "                <div class=\"flex-shrink-1 bubble-color rounded py-2 px-3 m"+data[i]['position'].charAt(0)+"-3\">" +
             "                  <div class=\"font-weight-bold mb-1\">"+replaceNameByVous(data[i]['position'], data[i]['sender'])+"</div>" +
                                 "<div style=\"white-space: pre-wrap;\">" + data[i]['msg'] + "</div>" + showImage(data[i]['image']) +
-            "                </div>" +
+            "                </div><button href='#' class='delete-msg'></button>" +
             "              </div>");
     }
     $('#Messages').scrollTop(9999999);
@@ -148,6 +150,15 @@ function notification(data) {
     }
 }
 
+async function deleteMessage() {
+    let msg_id = $(this).parent().attr("data-id");
+    await $.ajax({
+      type: "POST",
+      url: '/api/delete_message',
+      data : {'msg': msg_id},
+    });
+    $(showNewGroup);
+}
 
 async function sendImage() {
     let group = $('#list_groups a.active').attr("data-id");

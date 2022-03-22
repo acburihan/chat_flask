@@ -45,10 +45,11 @@ def signup():
 
 @app.route('/main')
 def main():
+    global authenticated
     if authenticated:
         return flask.render_template("index.html.jinja2")
     else:
-        return redirect('/signup')
+        return redirect('/')
 
 
 @app.route('/group')
@@ -63,7 +64,7 @@ def dashboard():
 
 @app.route('/api/login', methods=['GET', 'POST'])
 def login_api():
-    global current_user
+    global current_user, authenticated
     request_data = flask.request.form
     email = request_data['email']
     password = request_data['password']
@@ -109,6 +110,7 @@ def signup_api():
 
 @app.route('/api/get_current_user')
 def get_current_user():
+    global current_user
     current = db.session.query(User).filter(User.user_id == current_user).first()
 
     return flask.jsonify({
@@ -119,6 +121,7 @@ def get_current_user():
 
 @app.route("/api/send_message", methods=["POST"])
 def send_message():
+    global current_user
     request_data = flask.request.form
     group_id = request_data['group']
     sender_id = current_user
@@ -148,6 +151,7 @@ def send_message():
 
 
 def position(sender):
+    global current_user
     if sender == current_user:
         return "right mb-4"
     else:
@@ -190,6 +194,7 @@ def get_all_group_message():
 
 @app.route('/api/get_all_message/<group_id>')
 def get_all_message(group_id):
+    global current_user
     messages = db.session.query(Message, User).join(Message.sender).filter(Message.group_id == group_id).all()
 
     result = []
@@ -218,6 +223,7 @@ def get_all_message(group_id):
 
 @app.route('/api/get_new_message/<group_id>')
 def get_new_messages(group_id):
+    global current_user
     sender = db.aliased(User)
     user_now = db.aliased(User)
     new_messages = db.session.query(Message, user_now, sender)\
@@ -266,6 +272,7 @@ def get_groups():
 
 @app.route('/api/get_notifications')
 def get_notifications():
+    global current_user
     messages = db.session.query(Message.group_id, User, func.count(User.user_id)).join(Message, User.unseen)\
         .filter(User.user_id == current_user).group_by(Message.group_id).all()
     return flask.jsonify([
@@ -277,8 +284,24 @@ def get_notifications():
     ])
 
 
+@app.route("/api/delete_message", methods=["POST"])
+def delete_message():
+    request_data = flask.request.form
+    msg_id = request_data['msg']
+
+    message = db.session.query(Message).filter(Message.msg_id == msg_id).first()
+    db.session.delete(message)
+    db.session.commit()
+
+    response = {
+        "msg": msg_id,
+    }
+
+    return flask.jsonify(response)
+
 @app.route("/api/delete_group", methods=["POST"])
 def delete_group():
+    global current_user
     request_data = flask.request.form
     group_id = request_data['group']
     sender_id = current_user
@@ -363,6 +386,7 @@ def get_all_users():
 
 @app.route("/api/create_group", methods=["POST"])
 def create_group():
+    global current_user
     request_data = flask.request.form
     group_name = request_data['group_name']
     new_group = Group(name=group_name)
@@ -407,6 +431,7 @@ def upload_file(image_type):
 
 
 def add_image(image_type, filename, group_id):
+    global current_user
     if image_type == "image":
         group = db.session.query(Group).filter(Group.group_id == group_id).first()
         sender = db.session.query(User).filter(User.user_id == current_user).first()
@@ -434,14 +459,16 @@ def add_image(image_type, filename, group_id):
         return flask.render_template("index.html.jinja2")
 
 
-def add_data_sent(data, total_data_ko):
+def add_data_sent(data):
+    global current_user, total_data_ko
     data = sys.getsizeof(data)
     total_data_ko += data
     user = db.session.query(User).filter(User.user_id == current_user).first()
     user.data_sent = user.data_sent + data
 
 
-def add_data_received(result, total_data_ko):
+def add_data_received(result):
+    global current_user, total_data_ko
     data = sys.getsizeof(result)
     total_data_ko += data
     user = db.session.query(User).filter(User.user_id == current_user).first()
