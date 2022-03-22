@@ -1,4 +1,5 @@
 import os
+import sys
 
 import flask
 from database.database import db, init_database
@@ -25,6 +26,7 @@ with app.test_request_context():
 
 # The id of the user that is connected
 current_user = 1
+total_data_ko = 0
 
 
 @app.route('/')
@@ -362,6 +364,20 @@ def add_image(image_type, filename, group_id):
         db.session.commit()
     else:
         return flask.render_template("index.html.jinja2")
+
+
+def add_data_sent(data, total_data_ko):
+    data = sys.getsizeof(data)
+    total_data_ko += data
+    user = db.session.query(User).filter(User.user_id == current_user).first()
+    user.data_sent = user.data_sent + data
+
+
+def add_data_received(result, total_data_ko):
+    data = sys.getsizeof(result)
+    total_data_ko += data
+    user = db.session.query(User).filter(User.user_id == current_user).first()
+    user.data_received = user.data_received + data
 
 
 @app.route('/uploads/<filename>')
