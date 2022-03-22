@@ -1,5 +1,5 @@
 import flask
-from flask import Flask
+from flask import Flask, redirect, url_for
 from flask_wtf import FlaskForm
 
 from database.database import db, init_database
@@ -22,7 +22,8 @@ with app.test_request_context():
     init_database()
 
 # The id of the user that is connected
-current_user = 1
+current_user = []
+logged_in = False
 
 
 @app.route('/')
@@ -43,6 +44,23 @@ def dashboard_page():
 @app.route('/login')
 def login_page():
     return flask.render_template("login.html")
+
+
+@app.route('/api/login', methods=['GET', 'POST'])
+def login_api():
+    global current_user
+    global logged_in
+    request_data = flask.request.form
+    email = request_data['email']
+    password = request_data['password']
+
+    current = db.session.query(User).filter(User.email == email).first()
+    if current.password == password:
+        current_user = current.user_id
+        logged_in = True
+        return redirect(url_for('hello_world'))
+    else:
+        return redirect(url_for('login_page'))
 
 
 @app.route('/signup')
