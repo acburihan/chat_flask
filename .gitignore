@@ -153,3 +153,4 @@ cython_debug/
 .idea/
 database/database.db
 ‪C:\Users\lucas\Desktop\Web\Projet\chat_flask\database\database.db
+database/database.db~dashboard
