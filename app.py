@@ -209,6 +209,7 @@ def get_all_group_message():
 
     return flask.jsonify(result)
 
+
 @app.route('/api/get_all_message/<group_id>')
 def get_all_message(group_id):
     global current_user

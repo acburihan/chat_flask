@@ -183,8 +183,8 @@ function display_id(group_id) {
 }
 
 function hidden_other(user_id) {
-    let filtered = $('#listUsers').children().filter(function() {
-    return !($(this).attr("data-id") === user_id.toString());});
+    let filtered = $('#listUsers').children().children('button').filter(function() {
+    return ($(this).attr("data-id") === user_id.toString());});
     if (filtered.length === 1) {
         return " hidden"
     }
