@@ -73,7 +73,6 @@ def login_api():
     if current.password == password:
         current_user = current.user_id
         logged_in = True
-    db.session.commit()
     return redirect(url_for('hello_world'))
 
 
