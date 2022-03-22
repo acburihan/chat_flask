@@ -1,3 +1,5 @@
+import sys
+
 import flask
 from flask import Flask, redirect, url_for
 from flask_wtf import FlaskForm
@@ -39,9 +41,19 @@ def group_page():
     return flask.render_template("groups.html")
 
 
-@app.route('/dashboard')
+@app.route('/dashboard', methods=['GET', 'POST'])
 def dashboard_page():
-    return flask.render_template("dashboard.html")
+    sent = db.session.query(Message).filter(Message.sender_id == current_user).all()
+    s_vol = 0
+    for s in sent:
+        s_vol += sys.getsizeof(s)
+
+    received = db.session.query(Message).filter(Message.sender_id != current_user).all()
+    r_vol = 0
+    for r in received:
+        r_vol += sys.getsizeof(r)
+
+    return flask.render_template("dashboard.html.jinja2", sent=len(sent), sent_volume=s_vol, received=len(received), received_volume=r_vol)
 
 
 @app.route('/login')
@@ -61,6 +73,7 @@ def login_api():
     if current.password == password:
         current_user = current.user_id
         logged_in = True
+    db.session.commit()
     return redirect(url_for('hello_world'))
 
 
