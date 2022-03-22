@@ -73,6 +73,7 @@ def dashboard():
 
 @app.route('/api/login', methods=['GET', 'POST'])
 def login_api():
+    global authenticated
     global current_user
     request_data = flask.request.form
     email = request_data['email']
