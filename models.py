@@ -23,12 +23,14 @@ class User(db.Model):
     unseen = db.relationship('Message', backref='user', cascade="all", secondary=message_junction_table)
     data_sent = db.Column(db.Integer)
     data_received = db.Column(db.Integer)
+    avatar = db.Column(db.Text)
 
 
 class Group(db.Model):
     group_id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.Text)
     users = db.relationship('User', backref='group', cascade="all", secondary=group_junction_table)
+    icon = db.Column(db.Text)
 
 
 class Message(db.Model):
@@ -39,3 +41,4 @@ class Message(db.Model):
     sender = db.relationship('User', backref="message", cascade="all")
     msg = db.Column(db.Text)
     date = db.Column(db.DateTime)
+    image = db.Column(db.Text)

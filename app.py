@@ -1,32 +1,39 @@
+import os
+import sys
+
 import flask
 from flask import Flask, redirect, url_for
-from flask_wtf import FlaskForm
 
 from database.database import db, init_database
 from models import *
 from datetime import datetime
 from sqlalchemy import func
-from flask_login import UserMixin
-# from flask_wtf import wtforms
-from wtforms import StringField, PasswordField, SubmitField
-from wtforms.validators import InputRequired, Length, ValidationError
+
+from werkzeug.utils import secure_filename
+
+UPLOAD_FOLDER = '/image'
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg', 'gif'}
 
 app = flask.Flask(__name__)
 
 app.config["SQLALCHEMY_DATABASE_URI"] = "sqlite:///database/database.db"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-# app.config["SECRET_KEY"] = 'secretkey'
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
+app.secret_key = 'super secret key'
+app.config['SESSION_TYPE'] = 'filesystem'
+os.makedirs(os.path.join(app.config['UPLOAD_FOLDER'], 'htmlfi'), exist_ok=True)
 
 db.init_app(app)
 with app.test_request_context():
     init_database()
 
-# The id of the user that is connected
+# Global variables
 current_user = 1
 authenticated = False
+total_data_ko = 0
+
 
 @app.route('/')
-
 def login():
     return flask.render_template("login.html")
 
@@ -106,6 +113,7 @@ def get_current_user():
 
     return flask.jsonify({
                 "name": current.username,
+                "avatar": current.avatar
             })
 
 
@@ -141,9 +149,9 @@ def send_message():
 
 def position(sender):
     if sender == current_user:
-        return "right"
+        return "right mb-4"
     else:
-        return "left"
+        return "left pb-4"
 
 
 def short_date(long_date):
@@ -155,13 +163,33 @@ def short_date(long_date):
     elif long_date.hour != today.hour:
         return long_date.strftime("%H:%M")
     elif long_date.minute != today.minute:
-        return "Il y a " + str(today.minute-long_date.minute) + " min"
+        return str(today.minute-long_date.minute) + " min"
     else:
-        return "Il y a " + str(today.second-long_date.second) + " s"
+        return str(today.second-long_date.second) + " sec"
 
+
+@app.route('/api/get_all_group_message')
+def get_all_group_message():
+    messages = db.session.query(Message, User).join(Message.sender).all()
+
+    result = []
+    for message in messages:
+        result.append(
+            {
+                "id": message[0].msg_id,
+                "msg": message[0].msg,
+                "sender": message[1].username,
+                "sender_avatar": message[1].avatar,
+                "group": message[0].group_id,
+                "date": short_date(message[0].date),
+                "image": message[0].image,
+            }
+        )
+
+    return flask.jsonify(result)
 
 @app.route('/api/get_all_message/<group_id>')
-def get_all_messages(group_id):
+def get_all_message(group_id):
     messages = db.session.query(Message, User).join(Message.sender).filter(Message.group_id == group_id).all()
 
     result = []
@@ -171,8 +199,10 @@ def get_all_messages(group_id):
                 "id": message[0].msg_id,
                 "msg": message[0].msg,
                 "sender": message[1].username,
+                "sender_avatar": message[1].avatar,
                 "position": position(message[0].sender_id),
                 "date": short_date(message[0].date),
+                "image": message[0].image,
             }
         )
 
@@ -201,8 +231,10 @@ def get_new_messages(group_id):
                 "id": message[0].msg_id,
                 "msg": message[0].msg,
                 "sender": message[2].username,
+                "sender_avatar": message[2].avatar,
                 "position": position(message[0].sender_id),
                 "date": short_date(message[0].date),
+                "image": message[0].image,
             }
         )
         message[1].unseen.remove(message[0])
@@ -226,6 +258,7 @@ def get_groups():
         {
             "group_id": group[0].group_id,
             "group_name": group[0].name,
+            "icon": group[0].icon,
         }
         for group in groups
     ])
@@ -233,11 +266,11 @@ def get_groups():
 
 @app.route('/api/get_notifications')
 def get_notifications():
-    messages = db.session.query(Message, User, func.count(User.user_id)).join(User.unseen)\
+    messages = db.session.query(Message.group_id, User, func.count(User.user_id)).join(Message, User.unseen)\
         .filter(User.user_id == current_user).group_by(Message.group_id).all()
     return flask.jsonify([
         {
-            "group_id": msg[0].group_id,
+            "group_id": msg[0],
             "notifications": msg[2],
         }
         for msg in messages
@@ -309,6 +342,7 @@ def get_users(group_id):
         {
             "user_id": user[0].user_id,
             "username": user[0].username,
+            "avatar": user[0].username,
         }
         for user in users
     ])
@@ -321,6 +355,7 @@ def get_all_users():
         {
             "user_id": user.user_id,
             "username": user.username,
+            "avatar": user.username,
         }
         for user in users
     ])
@@ -343,6 +378,79 @@ def create_group():
     }
 
     return flask.jsonify(message)
+
+
+def allowed_file(filename):
+    return '.' in filename and \
+           filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+
+@app.route('/upload/<image_type>', methods=['POST'])
+def upload_file(image_type):
+    if flask.request.method == 'POST':
+        # check if the post request has the file part
+        if 'file' not in flask.request.files:
+            flask.flash('No file part')
+            return '', 204
+        file = flask.request.files['file']
+        # if user does not select file, browser also
+        # submit an empty part without filename
+        if file.filename == '':
+            flask.flash('No selected file')
+            return '', 204
+        if file and allowed_file(file.filename):
+            filename = secure_filename(file.filename)
+            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+            add_image(image_type, filename, flask.request.form['group'])
+            return '', 204
+        return '', 204
+
+
+def add_image(image_type, filename, group_id):
+    if image_type == "image":
+        group = db.session.query(Group).filter(Group.group_id == group_id).first()
+        sender = db.session.query(User).filter(User.user_id == current_user).first()
+
+        new_message = Message(msg="", image=filename, date=datetime.today())
+        new_message.sender = sender
+        new_message.group = group
+        db.session.add(new_message)
+
+        group_users = db.session.query(Group, User).join(Group.users).filter(Group.group_id == group_id).all()
+
+        for user in group_users:
+            user[1].unseen.append(new_message)
+
+        db.session.commit()
+    elif image_type == "avatar":
+        user = db.session.query(User).filter(User.user_id == current_user).first()
+        user.avatar = filename
+        db.session.commit()
+    elif image_type == "icone":
+        group = db.session.query(Group).filter(Group.group_id == group_id).first()
+        group.icon = filename
+        db.session.commit()
+    else:
+        return flask.render_template("index.html.jinja2")
+
+
+def add_data_sent(data, total_data_ko):
+    data = sys.getsizeof(data)
+    total_data_ko += data
+    user = db.session.query(User).filter(User.user_id == current_user).first()
+    user.data_sent = user.data_sent + data
+
+
+def add_data_received(result, total_data_ko):
+    data = sys.getsizeof(result)
+    total_data_ko += data
+    user = db.session.query(User).filter(User.user_id == current_user).first()
+    user.data_received = user.data_received + data
+
+
+@app.route('/uploads/<filename>')
+def uploaded_file(filename):
+    return flask.send_from_directory(app.config['UPLOAD_FOLDER'], filename)
 
 
 if __name__ == '__main__':

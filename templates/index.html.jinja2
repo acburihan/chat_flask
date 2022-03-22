@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="fr">
+<html lang="fr" xmlns="http://www.w3.org/1999/html">
   <head>
       <meta charset="utf-8">
       <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
@@ -20,7 +20,8 @@
             .chat-message-left,
             .chat-message-right {
                 display: flex;
-                flex-shrink: 0
+                flex-shrink: 0;
+                max-width: 85%;
             }
 
             .chat-message-left {
@@ -33,20 +34,33 @@
             }
 
             .bubble-color {
-              background-color: rgba(127, 224, 30, 0.53) !important;
+                background-color: rgba(127, 224, 30, 0.53) !important;
+                max-width: 100%;
+                word-wrap:break-word;
+                white-space: normal;
+            }
+
+            .highlighted .bubble-color {
+                border: thick solid rgb(13, 110, 252);
             }
 
             .notif-color {
-              background-color: rgba(248, 50, 15, 0.94) !important;
+                background-color: rgba(248, 50, 15, 0.94) !important;
             }
 
             .py-3 {
-                padding-top: 1rem!important;
-                padding-bottom: 1rem!important;
+                padding-top: 1rem;
+                padding-bottom: 1rem;
             }
             .px-4 {
-                padding-right: 1.5rem!important;
-                padding-left: 1.5rem!important;
+                padding-right: 1.5rem;
+                padding-left: 1.5rem;
+            }
+            .mr-3 {
+                margin-right: 1rem;
+            }
+            .ml-3 {
+                margin-left: 1rem;
             }
             .flex-grow-0 {
                 flex-grow: 0!important;
@@ -60,32 +74,186 @@
                 overflow-y: scroll
             }
 
+            #form-popup {
+                display: none;
+                position: absolute;
+                z-index: 9;
+                width: 28.25%;
+                bottom: 10%;
+                background: rgba(13, 110, 252, 0.61);
+                border-radius: 25px;
+            }
+
+            .btn:focus {
+              outline: none;
+              box-shadow: none;
+            }
+
+            #form-popup .btn {
+                position: absolute;
+                z-index: 10;
+                width: 0;
+                background: linear-gradient(to right, rgba(13, 110, 252, 0), rgb(13, 110, 252));
+                border-radius: 0 25px 25px 0;
+                height: 100%;
+                right: 0%;
+                border: none;
+            }
+
+            textarea {
+                resize: none;
+                height: 5vh;
+            }
+
+            /* The Modal */
+
+            .message-image:hover {opacity: 0.7;}
+
+            .modal {
+                display: none; /* Hidden by default */
+                position: fixed; /* Stay in place */
+                z-index: 999; /* Sit on top */
+                padding-top: 100px; /* Location of the box */
+                left: 0;
+                top: 0;
+                width: 100%; /* Full width */
+                height: 100%; /* Full height */
+                overflow: auto; /* Enable scroll if needed */
+                background-color: rgb(0,0,0); /* Fallback color */
+                background-color: rgba(0,0,0,0.9); /* Black w/ opacity */
+            }
+
+            .modal-content {
+                margin: auto;
+                display: block;
+                max-width: 60vw;
+                max-height: 60vh;
+            }
+
+            /* Add Animation - Zoom in the Modal */
+            .modal-content {
+                animation-name: zoom;
+                animation-duration: 0.6s;
+            }
+
+            @keyframes zoom {
+                from {transform:scale(0)}
+                to {transform:scale(1)}
+            }
+
+            .close {
+                position: absolute;
+                top: 8vh;
+                right: 18vw;
+                color: #f1f1f1;
+                font-size: 40px;
+                font-weight: bold;
+                transition: 0.3s;
+            }
+
+            .close:hover,
+            .close:focus {
+                color: #bbb;
+                text-decoration: none;
+                cursor: pointer;
+            }
+
+            /* 100% Image Width on Smaller Screens */
+            @media only screen and (max-width: 700px){
+              .modal-content {
+                  width: 100%;
+              }
+            }
+
+            /* Search message */
+
+            #search_message {
+                list-style-type: none;
+                position : absolute;
+                padding: 0;
+                margin: 0;
+                top: 1.5vh;
+                left: 75vw;
+                z-index: 20;
+                width: 20vw;
+            }
+
+            #search_message .list-search {
+                display: none;
+                max-height: 40vh;
+                overflow-y: auto;
+                overflow-x: hidden;
+            }
+
+            #search_message .list-search a {
+                border: 1px solid #ddd;
+                margin-top: -1px;
+                background-color: #f6f6f6;
+                padding: 0rem 0rem;
+                text-decoration: none;
+                font-size: 18px;
+                color: black;
+                display: block;
+                height: 8vh;
+                width: 100%;
+            }
+
+            .search-content div {
+                position: relative;
+                left: 0.75rem;
+                top: 0.5rem;
+            }
+            .search-content img {
+                position: relative;
+                left: 1rem;
+                top: 0.1rem;
+            }
+
+            #search_message a:hover:not(.header) {
+                background-color: #eee;
+            }
+
+            #search_image {
+                display:block;
+                border:0 none;
+                border-radius: 10px;
+                outline:none;
+                position: relative;
+                left: 17vw;
+                bottom: 4.7vh;
+            }
+
+            #search_image.active {
+                background-color: rgba(13, 110, 252);
+            }
       </style>
   </head>
   <body>
       <nav class="navbar navbar-expand-lg navbar-dark bg-dark" style="max-height: 10vh;">
-         <div class="container-fluid">
-          <a class="navbar-brand" href="/main">User</a>
-          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-          </button>
+          <div class="container-fluid">
+              <a class="navbar-brand" href="/main">User</a>
+              <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+                  <span class="navbar-toggler-icon"></span>
+              </button>
+              <div class="collapse navbar-collapse" id="navbarColor01">
+                  <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                      <li class="nav-item">
+                          <a class="nav-link" aria-current="page" href="/dashboard">Paramètres</a>
+                      </li>
+                      <li class="nav-item">
+                          <a class="nav-link" href="/group">Créer groupe</a>
+                      </li>
+                  </ul>
+                  <div id="search_message">
+                      <input class="form-control me-2" type="search" aria-label="Search" placeholder="Rechercher un message"/>
+                      <button id="search_image" class="">IMG</button>
+                      <div class="list-search" >
 
-          <div class="collapse navbar-collapse" id="navbarColor01">
-            <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-              <li class="nav-item">
-                <a class="nav-link" aria-current="page" href="/dashboard">Paramètres</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="/group">Créer groupe</a>
-              </li>
-            </ul>
-            <form class="d-flex">
-              <input class="form-control me-2" type="search" aria-label="Search" />
-              <button class="btn btn-outline-success" type="submit">Recherche</button>
-            </form>
+                      </div>
+                  </div>
+              </div>
           </div>
-         </div>
-        </nav>
+      </nav>
 
 <main class="content">
     <div class="container p-0">
@@ -105,80 +273,7 @@
 					</div>
 
                     <div id="list_groups">
-                        <a href="#" class="list-group-item list-group-item-action border-0">
-                            <div class="badge notif-color float-end">5</div>
-                            <div class="d-flex align-items-start">
-                                <img src="https://bootdey.com/img/Content/avatar/avatar5.png" class="rounded-circle mr-1" alt="Vanessa Tucker" width="40" height="40">
-                                <div class="flex-grow-1 ml-3">
-                                    Vanessa Tucker
-                                    <div class="small"><span class="fas fa-circle chat-online"></span> Online</div>
-                                </div>
-                            </div>
-                        </a>
-                        <a href="#" class="list-group-item list-group-item-action border-0">
-                            <div class="badge notif-color float-end">2</div>
-                            <div class="d-flex align-items-start">
-                                <img src="https://bootdey.com/img/Content/avatar/avatar2.png" class="rounded-circle mr-1" alt="William Harris" width="40" height="40">
-                                <div class="flex-grow-1 ml-3">
-                                    William Harris
-                                    <div class="small"><span class="fas fa-circle chat-online"></span> Online</div>
-                                </div>
-                            </div>
-                        </a>
-                        <a href="#" class="list-group-item list-group-item-action border-0">
-                            <div class="d-flex align-items-start">
-                                <img src="https://bootdey.com/img/Content/avatar/avatar3.png" class="rounded-circle mr-1" alt="Sharon Lessman" width="40" height="40">
-                                <div class="flex-grow-1 ml-3">
-                                    Sharon Lessman
-                                    <div class="small"><span class="fas fa-circle chat-online"></span> Online</div>
-                                </div>
-                            </div>
-                        </a>
-                        <a href="#" class="list-group-item list-group-item-action border-0">
-                            <div class="d-flex align-items-start">
-                                <img src="https://bootdey.com/img/Content/avatar/avatar4.png" class="rounded-circle mr-1" alt="Christina Mason" width="40" height="40">
-                                <div class="flex-grow-1 ml-3">
-                                    Christina Mason
-                                    <div class="small"><span class="fas fa-circle chat-offline"></span> Offline</div>
-                                </div>
-                            </div>
-                        </a>
-                        <a href="#" class="list-group-item list-group-item-action border-0">
-                            <div class="d-flex align-items-start">
-                                <img src="https://bootdey.com/img/Content/avatar/avatar5.png" class="rounded-circle mr-1" alt="Fiona Green" width="40" height="40">
-                                <div class="flex-grow-1 ml-3">
-                                    Fiona Green
-                                    <div class="small"><span class="fas fa-circle chat-offline"></span> Offline</div>
-                                </div>
-                            </div>
-                        </a>
-                        <a href="#" class="list-group-item list-group-item-action border-0">
-                            <div class="d-flex align-items-start">
-                                <img src="https://bootdey.com/img/Content/avatar/avatar2.png" class="rounded-circle mr-1" alt="Doris Wilder" width="40" height="40">
-                                <div class="flex-grow-1 ml-3">
-                                    Doris Wilder
-                                    <div class="small"><span class="fas fa-circle chat-offline"></span> Offline</div>
-                                </div>
-                            </div>
-                        </a>
-                        <a href="#" class="list-group-item list-group-item-action border-0">
-                            <div class="d-flex align-items-start">
-                                <img src="https://bootdey.com/img/Content/avatar/avatar4.png" class="rounded-circle mr-1" alt="Haley Kennedy" width="40" height="40">
-                                <div class="flex-grow-1 ml-3">
-                                    Haley Kennedy
-                                    <div class="small"><span class="fas fa-circle chat-offline"></span> Offline</div>
-                                </div>
-                            </div>
-                        </a>
-                        <a href="#" class="list-group-item list-group-item-action border-0">
-                            <div class="d-flex align-items-start">
-                                <img src="https://bootdey.com/img/Content/avatar/avatar3.png" class="rounded-circle mr-1" alt="Jennifer Chang" width="40" height="40">
-                                <div class="flex-grow-1 ml-3">
-                                    Jennifer Chang
-                                    <div class="small"><span class="fas fa-circle chat-offline"></span> Offline</div>
-                                </div>
-                            </div>
-                        </a>
+
                     </div>
 
 					<hr class="d-block d-lg-none mt-1 mb-0">
@@ -190,7 +285,7 @@
 								<img src="https://bootdey.com/img/Content/avatar/avatar3.png" class="rounded-circle mr-1" alt="Sharon Lessman" width="40" height="40">
 							</div>
 							<div class="flex-grow-1 pl-3">
-								<strong>Sharon Lessman</strong>
+								<strong></strong>
 							</div>
 							<div>
 								<button class="btn btn-light border btn-lg px-3"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-more-horizontal feather-lg"><circle cx="12" cy="12" r="1"></circle><circle cx="19" cy="12" r="1"></circle><circle cx="5" cy="12" r="1"></circle></svg></button>
@@ -201,154 +296,25 @@
 					<div class="position-relative" >
 						<div id="Messages" class="chat-messages p-4">
 
-							<div class="chat-message-right pb-4">
-								<div>
-									<img src="https://bootdey.com/img/Content/avatar/avatar1.png" class="rounded-circle mr-1" alt="Chris Wood" width="40" height="40">
-									<div class="text-muted small text-nowrap mt-2">2:33 am</div>
-								</div>
-								<div class="flex-shrink-1 bubble-color rounded py-2 px-3 mr-3">
-									<div class="font-weight-bold mb-1">You</div>
-									Lorem ipsum dolor sit amet, vis erat denique in, dicunt prodesset te vix.
-								</div>
-							</div>
-
-							<div class="chat-message-left pb-4">
-								<div>
-									<img src="https://bootdey.com/img/Content/avatar/avatar3.png" class="rounded-circle mr-1" alt="Sharon Lessman" width="40" height="40">
-									<div class="text-muted small text-nowrap mt-2">2:34 am</div>
-								</div>
-								<div class="flex-shrink-1 bubble-color rounded py-2 px-3 ml-3">
-									<div class="font-weight-bold mb-1">Sharon Lessman</div>
-									Sit meis deleniti eu, pri vidit meliore docendi ut, an eum erat animal commodo.
-								</div>
-							</div>
-
-							<div class="chat-message-right mb-4">
-								<div>
-									<img src="https://bootdey.com/img/Content/avatar/avatar1.png" class="rounded-circle mr-1" alt="Chris Wood" width="40" height="40">
-									<div class="text-muted small text-nowrap mt-2">2:35 am</div>
-								</div>
-								<div class="flex-shrink-1 bubble-color rounded py-2 px-3 mr-3">
-									<div class="font-weight-bold mb-1">You</div>
-									Cum ea graeci tractatos.
-								</div>
-							</div>
-
-							<div class="chat-message-left pb-4">
-								<div>
-									<img src="https://bootdey.com/img/Content/avatar/avatar3.png" class="rounded-circle mr-1" alt="Sharon Lessman" width="40" height="40">
-									<div class="text-muted small text-nowrap mt-2">2:36 am</div>
-								</div>
-								<div class="flex-shrink-1 bubble-color rounded py-2 px-3 ml-3">
-									<div class="font-weight-bold mb-1">Sharon Lessman</div>
-									Sed pulvinar, massa vitae interdum pulvinar, risus lectus porttitor magna, vitae commodo lectus mauris et velit.
-									Proin ultricies placerat imperdiet. Morbi varius quam ac venenatis tempus.
-								</div>
-							</div>
-
-							<div class="chat-message-left pb-4">
-								<div>
-									<img src="https://bootdey.com/img/Content/avatar/avatar3.png" class="rounded-circle mr-1" alt="Sharon Lessman" width="40" height="40">
-									<div class="text-muted small text-nowrap mt-2">2:37 am</div>
-								</div>
-								<div class="flex-shrink-1 bubble-color rounded py-2 px-3 ml-3">
-									<div class="font-weight-bold mb-1">Sharon Lessman</div>
-									Cras pulvinar, sapien id vehicula aliquet, diam velit elementum orci.
-								</div>
-							</div>
-
-							<div class="chat-message-right mb-4">
-								<div>
-									<img src="https://bootdey.com/img/Content/avatar/avatar1.png" class="rounded-circle mr-1" alt="Chris Wood" width="40" height="40">
-									<div class="text-muted small text-nowrap mt-2">2:38 am</div>
-								</div>
-								<div class="flex-shrink-1 bubble-color rounded py-2 px-3 mr-3">
-									<div class="font-weight-bold mb-1">You</div>
-									Lorem ipsum dolor sit amet, vis erat denique in, dicunt prodesset te vix.
-								</div>
-							</div>
-
-							<div class="chat-message-left pb-4">
-								<div>
-									<img src="https://bootdey.com/img/Content/avatar/avatar3.png" class="rounded-circle mr-1" alt="Sharon Lessman" width="40" height="40">
-									<div class="text-muted small text-nowrap mt-2">2:39 am</div>
-								</div>
-								<div class="flex-shrink-1 bubble-color rounded py-2 px-3 ml-3">
-									<div class="font-weight-bold mb-1">Sharon Lessman</div>
-									Sit meis deleniti eu, pri vidit meliore docendi ut, an eum erat animal commodo.
-								</div>
-							</div>
-
-							<div class="chat-message-right mb-4">
-								<div>
-									<img src="https://bootdey.com/img/Content/avatar/avatar1.png" class="rounded-circle mr-1" alt="Chris Wood" width="40" height="40">
-									<div class="text-muted small text-nowrap mt-2">2:40 am</div>
-								</div>
-								<div class="flex-shrink-1 bubble-color rounded py-2 px-3 mr-3">
-									<div class="font-weight-bold mb-1">You</div>
-									Cum ea graeci tractatos.
-								</div>
-							</div>
-
-							<div class="chat-message-right mb-4">
-								<div>
-									<img src="https://bootdey.com/img/Content/avatar/avatar1.png" class="rounded-circle mr-1" alt="Chris Wood" width="40" height="40">
-									<div class="text-muted small text-nowrap mt-2">2:41 am</div>
-								</div>
-								<div class="flex-shrink-1 bubble-color rounded py-2 px-3 mr-3">
-									<div class="font-weight-bold mb-1">You</div>
-									Morbi finibus, lorem id placerat ullamcorper, nunc enim ultrices massa, id dignissim metus urna eget purus.
-								</div>
-							</div>
-
-							<div class="chat-message-left pb-4">
-								<div>
-									<img src="https://bootdey.com/img/Content/avatar/avatar3.png" class="rounded-circle mr-1" alt="Sharon Lessman" width="40" height="40">
-									<div class="text-muted small text-nowrap mt-2">2:42 am</div>
-								</div>
-								<div class="flex-shrink-1 bubble-color rounded py-2 px-3 ml-3">
-									<div class="font-weight-bold mb-1">Sharon Lessman</div>
-									Sed pulvinar, massa vitae interdum pulvinar, risus lectus porttitor magna, vitae commodo lectus mauris et velit.
-									Proin ultricies placerat imperdiet. Morbi varius quam ac venenatis tempus.
-								</div>
-							</div>
-
-							<div class="chat-message-right mb-4">
-								<div>
-									<img src="https://bootdey.com/img/Content/avatar/avatar1.png" class="rounded-circle mr-1" alt="Chris Wood" width="40" height="40">
-									<div class="text-muted small text-nowrap mt-2">2:43 am</div>
-								</div>
-								<div class="flex-shrink-1 bubble-color rounded py-2 px-3 mr-3">
-									<div class="font-weight-bold mb-1">You</div>
-									Lorem ipsum dolor sit amet, vis erat denique in, dicunt prodesset te vix.
-								</div>
-							</div>
-
-							<div class="chat-message-left pb-4">
-								<div>
-									<img src="https://bootdey.com/img/Content/avatar/avatar3.png" class="rounded-circle mr-1" alt="Sharon Lessman" width="40" height="40">
-									<div class="text-muted small text-nowrap mt-2">2:44 am</div>
-								</div>
-								<div class="flex-shrink-1 bubble-color rounded py-2 px-3 ml-3">
-									<div class="font-weight-bold mb-1">Sharon Lessman</div>
-									Sit meis deleniti eu, pri vidit meliore docendi ut, an eum erat animal commodo.
-								</div>
-							</div>
-
 						</div>
 					</div>
 
-					<div class="flex-grow-0 py-3 px-4 border-top" style="height: 10vh">
-						<div id="send_message" class="input-group">
-							<input type="text" class="form-control" placeholder="Écrivez un message...">
-							<button type="button" class="btn btn-primary">Envoyer</button>
-						</div>
-					</div>
+					<div id="send_message" class="flex-grow-0 py-3 px-4 border-top" style="height: 10vh">
 
+					</div>
+                    <div id="form-popup">
+                        <input class="modal-body" type="file" name="file" style="overflow: hidden; width: 95%">
+                        <button type="submit" class="modal-body btn">↲</button>
+                    </div>
 				</div>
 			</div>
 		</div>
 	</div>
 </main>
+<div id="ModalImage" class="modal">
+    <span class="close">&times;</span>
+    <img class="modal-content">
+    <a href="#" download=""><button class="btn btn-primary" style="position: absolute; bottom: 15vh; left: 45vw;">Télécharger</button></a>
+</div>
   </body>
 </html>
