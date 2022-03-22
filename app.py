@@ -28,7 +28,10 @@ logged_in = False
 
 @app.route('/')
 def hello_world():
-    return flask.render_template("index.html.jinja2")
+    if logged_in == True:
+        return flask.render_template("index.html.jinja2")
+    else:
+        return redirect(url_for('signup_page'))
 
 
 @app.route('/groups')
@@ -58,9 +61,7 @@ def login_api():
     if current.password == password:
         current_user = current.user_id
         logged_in = True
-        return redirect(url_for('hello_world'))
-    else:
-        return redirect(url_for('login_page'))
+    return redirect(url_for('hello_world'))
 
 
 @app.route('/signup')
