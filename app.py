@@ -57,12 +57,15 @@ def login_api():
     email = request_data['email']
     password = request_data['password']
 
+    user_same_mail = db.session.query(User).filter(User.email == email).first()
     current = db.session.query(User).filter(User.email == email).filter(User.password == password).first()
-    if current is None:
-        result = flask.jsonify(success=False)
+    if user_same_mail is None:
+        result = flask.jsonify(success="mail")
+    elif current is None:
+        result = flask.jsonify(success="password")
     else:
         current_user = current.user_id
-        result = flask.jsonify(success=True)
+        result = flask.jsonify(success="authenticated")
     return result
 
 

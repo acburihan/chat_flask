@@ -16,9 +16,15 @@ async function verifyUser() {
                 alert('An error occurred!');
             },
             success:function(response){
-                if(response['success']){
+                if(response['success']==="authenticated"){
                     window.location.href = "/main";
                    }
+                else if(response['success']==="mail"){
+                    alert("Identifiant incorrect")
+                }
+                else if(response['success']==="password"){
+                    alert("Mot de passe incorrect")
+                }
             }
         });
 }
