@@ -22,50 +22,48 @@ with app.test_request_context():
     init_database()
 
 # The id of the user that is connected
-current_user = []
-logged_in = False
+current_user = 1
 
 
 @app.route('/')
-def hello_world():
+def login():
+    return flask.render_template("login.html")
+
+
+@app.route('/signup')
+def signup():
+    return flask.render_template("signup.html")
+
+
+@app.route('/main')
+def main():
     return flask.render_template("index.html.jinja2")
 
 
-@app.route('/groups')
-def group_page():
-    return flask.render_template("groups.html")
+@app.route('/group')
+def group():
+    return flask.render_template("group.html")
 
 
 @app.route('/dashboard')
-def dashboard_page():
+def dashboard():
     return flask.render_template("dashboard.html")
-
-
-@app.route('/login')
-def login_page():
-    return flask.render_template("login.html")
 
 
 @app.route('/api/login', methods=['GET', 'POST'])
 def login_api():
     global current_user
-    global logged_in
     request_data = flask.request.form
     email = request_data['email']
     password = request_data['password']
 
-    current = db.session.query(User).filter(User.email == email).first()
-    if current.password == password:
-        current_user = current.user_id
-        logged_in = True
-        return redirect(url_for('hello_world'))
+    current = db.session.query(User).filter(User.email == email).filter(User.password == password).first()
+    if current is None:
+        result = flask.jsonify(success=False)
     else:
-        return redirect(url_for('login_page'))
-
-
-@app.route('/signup')
-def signup_page():
-    return flask.render_template("signup.html")
+        current_user = current.user_id
+        result = flask.jsonify(success=True)
+    return result
 
 
 @app.route('/api/signup', methods=['GET', 'POST'])
@@ -75,11 +73,23 @@ def signup_api():
     email = request_data['email']
     password = request_data['password']
 
-    new_user = User(username=username, email=email, password=password)
-    db.session.add(new_user)
+    user_same_mail = db.session.query(User).filter(User.email == email).first()
+    user_same_name = db.session.query(User).filter(User.username == username).first()
 
-    db.session.commit()
-    return flask.render_template("index.html.jinja2")
+    if (user_same_mail is not None) and (user_same_name is not None):
+        result = flask.jsonify(success="both")
+    elif user_same_mail is not None:
+        result = flask.jsonify(success="email")
+    elif user_same_name is not None:
+        result = flask.jsonify(success="username")
+    elif len(password) < 2:
+        result = flask.jsonify(success="password")
+    else:
+        new_user = User(username=username, email=email, password=password)
+        db.session.add(new_user)
+        db.session.commit()
+        result = flask.jsonify(success="registered")
+    return result
 
 
 @app.route('/api/get_current_user')
