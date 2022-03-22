@@ -25,7 +25,9 @@ function onLoad () {
     $('#search_message .list-search').on("click", "a", goToMessage);
     $('#search_image').on("click", function() {$(this).toggleClass("active");
                                                $('#search_message input').focus();
-                                               $(filterMessage)})
+                                               $(filterMessage)});
+
+    $('#Messages').on("click", ".delete-msg", deleteMessage);
 
     setInterval(refreshMessage, 6000000);
     setInterval(refreshNotification,6000000);
@@ -82,7 +84,7 @@ function showMessage(data) {
             "                <div class=\"flex-shrink-1 bubble-color rounded py-2 px-3 m"+data[i]['position'].charAt(0)+"-3\">" +
             "                  <div class=\"font-weight-bold mb-1\">"+replaceNameByVous(data[i]['position'], data[i]['sender'])+"</div>" +
                                 "<div style=\"white-space: pre-wrap;\">" + data[i]['msg'] + "</div>" + showImage(data[i]['image']) +
-            "                </div>" +
+            "                </div><button href='#' class='delete-msg'></button>" +
             "              </div>");
     }
     $('#Messages').scrollTop(9999999);
@@ -90,6 +92,7 @@ function showMessage(data) {
 
 function showGroups(data) {
     $('#list_groups').text("");
+    $('#send_message').text("");
     for (let i=0 ; i<data.length ; i++) {
         $('#list_groups').append("<a href=\"#\" class=\"list-group-item list-group-item-action border-0\" data-id=\"" + data[i]['group_id'] + "\">" +
             "                            <div class=\"badge notif-color float-end\">0</div>" +
@@ -117,13 +120,16 @@ function selectGroup() {
     let group = $(this).attr("data-id");
     $('#send_message [data-id='+group+']').show();
 
+    $('#button-group').attr("href", "/group/"+group).css("visibility", "visible");
+
     $('#list_groups a.active .badge').text(0); //Change the notifications because we have probably seen what were unseen messages
     $(showNewGroup);
 }
 
 function showNewGroup() {
     let group_name = $('#list_groups a.active div.ml-3').text();
-    $('#ActionGroup strong').text(group_name);
+    $('#ActionGroup .flex-grow-1').html("<h4><strong>"+group_name+"</strong></h4>");
+    $('#ActionGroup .position-relative').html('<img src="../../static/image/icone_par_defaut.png" class="rounded-circle mr-1" alt="icon" width="40" height="40">');
     //Clearing the messages of the old group and displaying all the messages of the new group
     let group = $('#list_groups a.active').attr("data-id");
     $('#Messages').text("");
@@ -148,6 +154,15 @@ function notification(data) {
     }
 }
 
+async function deleteMessage() {
+    let msg_id = $(this).parent().attr("data-id");
+    await $.ajax({
+      type: "POST",
+      url: '/api/delete_message',
+      data : {'msg': msg_id},
+    });
+    $(showNewGroup);
+}
 
 async function sendImage() {
     let group = $('#list_groups a.active').attr("data-id");
