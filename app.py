@@ -68,7 +68,13 @@ def dashboard():
     for r in received:
         r_vol += sys.getsizeof(r)
 
-    return flask.render_template("dashboard.html.jinja2", sent=len(sent), sent_volume=s_vol, received=len(received), received_volume=r_vol)
+    images = db.session.query(Message).filter(Message.image != '').all()
+    i_vol = 0
+    for i in images:
+        i_vol += sys.getsizeof(i)
+    print(i_vol)
+
+    return flask.render_template("dashboard.html.jinja2", sent=len(sent), sent_volume=s_vol, received=len(received), received_volume=r_vol, images=len(images), images_vol=i_vol)
 
 
 @app.route('/api/login', methods=['GET', 'POST'])
