@@ -23,9 +23,10 @@ with app.test_request_context():
 
 # The id of the user that is connected
 current_user = 1
-
+authenticated = False
 
 @app.route('/')
+
 def login():
     return flask.render_template("login.html")
 
@@ -37,7 +38,10 @@ def signup():
 
 @app.route('/main')
 def main():
-    return flask.render_template("index.html.jinja2")
+    if authenticated:
+        return flask.render_template("index.html.jinja2")
+    else:
+        return redirect('/signup')
 
 
 @app.route('/group')
@@ -65,6 +69,7 @@ def login_api():
         result = flask.jsonify(success="password")
     else:
         current_user = current.user_id
+        authenticated = True
         result = flask.jsonify(success="authenticated")
     return result
 
