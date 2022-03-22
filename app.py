@@ -52,9 +52,9 @@ def main():
         return redirect('/')
 
 
-@app.route('/group')
-def group():
-    return flask.render_template("group.html")
+@app.route('/group/<group_id>')
+def group(group_id):
+    return flask.render_template("group.html", group_id=group_id)
 
 
 @app.route('/dashboard')
@@ -251,13 +251,6 @@ def get_new_messages(group_id):
 
 @app.route('/api/get_groups')
 def get_groups():
-
-    # new_user = User(username="User0", password="0000")
-    # db.session.add(new_user)
-    # new_user2 = User(username="User1", password="1111")
-    # db.session.add(new_user2)
-    # db.session.commit()
-
     groups = db.session.query(Group, User).join(Group.users).filter(User.user_id == current_user).all()
 
     return flask.jsonify([
@@ -360,12 +353,14 @@ def delete_user():
 
 @app.route('/api/get_users/<group_id>')
 def get_users(group_id):
-    users = db.session.query(User, Group).join(Group.users).filter(Group.group_id == group_id).all()
+    global current_user
+    users = db.session.query(User, Group).join(Group.users).filter(Group.group_id == group_id)\
+                                                            .filter(User.user_id != current_user).all()
     return flask.jsonify([
         {
             "user_id": user[0].user_id,
             "username": user[0].username,
-            "avatar": user[0].username,
+            "avatar": user[0].avatar,
         }
         for user in users
     ])
@@ -373,12 +368,13 @@ def get_users(group_id):
 
 @app.route('/api/get_all_users')
 def get_all_users():
-    users = db.session.query(User).all()
+    global current_user
+    users = db.session.query(User).filter(User.user_id != current_user).all()
     return flask.jsonify([
         {
             "user_id": user.user_id,
             "username": user.username,
-            "avatar": user.username,
+            "avatar": user.avatar,
         }
         for user in users
     ])
