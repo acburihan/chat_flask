@@ -4,13 +4,19 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-    <title>Dashboard</title>
+    <title>Tableau de Bord</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="assets/css/styles.css">
+    <script type="text/javascript"
+              src="https://code.jquery.com/jquery-3.6.0.min.js"
+			  integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4="
+			  crossorigin="anonymous"></script>
+    <script type="application/javascript" src="{{ url_for('static', filename='parameters.js') }}"></script>
 </head>
 
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark" style="max-height: 10vh;">
+<<<<<<< HEAD:templates/dashboard.html
          <div class="container-fluid">
           <a class="navbar-brand" href="/main">User</a>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
@@ -23,12 +29,28 @@
                 <a class="nav-link" aria-current="page" href="/dashboard">Paramètres</a>
               </li>
             </ul>
+=======
+          <div class="container-fluid">
+              <a class="navbar-brand" href="/main">User</a>
+              <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+                  <span class="navbar-toggler-icon"></span>
+              </button>
+              <div class="collapse navbar-collapse" id="navbarColor01">
+                  <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                      <li class="nav-item">
+                          <a class="nav-link" aria-current="page" href="/dashboard">Paramètres</a>
+                      </li>
+                      <li class="nav-item">
+                          <a class="nav-link" href="/group">Créer groupe</a>
+                      </li>
+                  </ul>
+              </div>
+>>>>>>> 82bbe229e7bb4a73f5f80ce49e14e5669a39c0c1:templates/dashboard.html.jinja2
           </div>
-         </div>
-        </nav>
+    </nav>
     <div class="container">
         <div class="d-sm-flex justify-content-between align-items-center mb-4">
-            <h3 class="text-dark mb-0">Dashboard</h3>
+            <h3 class="text-dark mb-0">Tableau de Bord</h3>
         </div>
         <div class="row">
             <div class="col">
@@ -36,9 +58,9 @@
                     <div class="card-body">
                         <div class="row align-items-center no-gutters">
                             <div class="col me-2">
-                                <div class="text-uppercase text-primary fw-bold text-xs mb-1"><span>Sent messages</span></div>
-                                <div class="text-dark fw-bold h5 mb-0"><span>X</span></div>
-                                <div class="text-dark fw-bold h5 mb-0"><span>Y Mb</span></div>
+                                <div class="text-uppercase text-primary fw-bold text-xs mb-1"><span>Messages envoyés</span></div>
+                                <div class="text-dark fw-bold h5 mb-0"><span>{{ sent }} messages</span></div>
+                                <div class="text-dark fw-bold h5 mb-0"><span>{{ sent_volume }} bytes</span></div>
                             </div>
                             <div class="col-auto"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icon-tabler-message fa-2x text-gray-300">
                                     <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
@@ -55,9 +77,9 @@
                     <div class="card-body">
                         <div class="row align-items-center no-gutters">
                             <div class="col me-2">
-                                <div class="text-uppercase text-primary fw-bold text-xs mb-1"><span>Images downloaded</span></div>
-                                <div class="text-dark fw-bold h5 mb-0"><span>Alpha</span></div>
-                                <div class="text-dark fw-bold h5 mb-0"><span>Beta Mb</span></div>
+                                <div class="text-uppercase text-primary fw-bold text-xs mb-1"><span>Images téléchargées</span></div>
+                                <div class="text-dark fw-bold h5 mb-0"><span>{{ images }} images</span></div>
+                                <div class="text-dark fw-bold h5 mb-0"><span>{{ images_vol }} bytes</span></div>
                             </div>
                             <div class="col-auto"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icon-tabler-file-download fa-2x text-gray-300">
                                     <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
@@ -75,9 +97,9 @@
                     <div class="card-body">
                         <div class="row align-items-center no-gutters">
                             <div class="col me-2">
-                                <div class="text-uppercase text-primary fw-bold text-xs mb-1"><span>read messages</span></div>
-                                <div class="text-dark fw-bold h5 mb-0"><span>A</span></div>
-                                <div class="text-dark fw-bold h5 mb-0"><span>B Mb</span></div>
+                                <div class="text-uppercase text-primary fw-bold text-xs mb-1"><span>Messages reçus</span></div>
+                                <div class="text-dark fw-bold h5 mb-0"><span>{{ received }} messages</span></div>
+                                <div class="text-dark fw-bold h5 mb-0"><span>{{ received_volume }} bytes</span></div>
                             </div>
                             <div class="col-auto"><svg xmlns="http://www.w3.org/2000/svg" width="1em" height="1em" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icon-tabler-messages fa-2x text-gray-300">
                                     <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>

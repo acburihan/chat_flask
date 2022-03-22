@@ -19,6 +19,7 @@ function onLoad () {
     $('#form-popup button').on('click', sendImage);
 }
 
+<<<<<<< HEAD
 async function refresh() {
     await $.get('/api/get_current_user', showUserName);
     await $.get('/api/get_groups', showGroups);
@@ -26,6 +27,15 @@ async function refresh() {
     await $.get('/api/get_all_users', showUsers);
 }
 
+=======
+function refresh() {
+        $.get('/api/get_groups', showGroups);
+        $.get('api/get_all_users', showUsers);
+        $.get('/api/get_current_user', showUserName);
+}
+
+
+>>>>>>> 82bbe229e7bb4a73f5f80ce49e14e5669a39c0c1
 function showUserName(data) {
     $('.navbar-brand').text(data['name']);
 }
